@@ -1,8 +1,9 @@
 import java.sql.*;
+
 public class dbDriver {
 	static Connection conn;
-	public static void main() throws SQLException{
-		System.out.println("blah blah");
+	public static void run() throws SQLException{
+		
 		// 1. Load the Oracle JDBC driver for this program
 		try 
 		{
