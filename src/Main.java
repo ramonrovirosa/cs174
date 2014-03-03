@@ -42,7 +42,17 @@ public class Main {
 //		// Get the value from the third column with string type
 //		System.out.println(rs.getString(3));
 		}
+		
+		String sql = "CREATE TABLE CUSTOMER " +
+                "(id INTEGER not NULL, " +
+                " name CHAR(20), " + 
+                " status CHAR(20), " + 
+                " order1 INTEGER, " + 
+                " order2 INTEGER, " +
+                " order3 INTEGER, " +
+                " PRIMARY KEY ( id ))"; 
 
+		createTable(sql, stmt);
 		// don't miss this
 		rs.close();
 	}
