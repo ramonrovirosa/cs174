@@ -1,9 +1,10 @@
+import java.io.IOException;
 import java.sql.*;
 
 
 public class Main {
 	static Connection conn;
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) throws SQLException, IOException {
 		// 1. Load the Oracle JDBC driver for this program
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
@@ -14,7 +15,7 @@ public class Main {
 		// 2. Test functions for each query
 		print_all();
 	}
-	public static void print_all() throws SQLException{
+	public static void print_all() throws SQLException, IOException{
 		// Connect to the database
 		String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
 		String strUsername = "alexander_simes";
@@ -34,6 +35,8 @@ public class Main {
 		EdepotItems.getNamebyStockNO(1, stmt);
 		EdepotItems.removebystockno(2,stmt);
 		EdepotItems.printall(stmt);
+		
+		ConsoleUI.initialPrompt();
 
 
 		
