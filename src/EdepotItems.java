@@ -54,6 +54,34 @@ public class EdepotItems {
 	      se.printStackTrace();
 	   }
 	}
+	public static void updateEdepotQuantity(int stockno, int quantity, Statement stmt){
+		String sql = "Update EdepotItems "+
+					 "SET quantity='" + quantity + "' " +
+					 "Where "+ " stockno='"+stockno +"'";
+		try{
+			stmt.executeUpdate(sql);
+			System.out.println("Updated quantity for "+stockno+" in the database");
+		}catch(SQLException se){
+	      //Handle errors for JDBC
+		  System.out.println(se);
+	      se.printStackTrace();
+	   }
+	}
+	
+	public static void updateEdepotReplenishment(int stockno, int replenishment, Statement stmt){
+		String sql = "Update EdepotItems "+
+					 "SET quantity='" + replenishment + "' " +
+					 "Where "+ " replenishment='"+replenishment +"'";
+		try{
+			stmt.executeUpdate(sql);
+			System.out.println("Updated replenishment for "+stockno+" in the database");
+		}catch(SQLException se){
+	      //Handle errors for JDBC
+		  System.out.println(se);
+	      se.printStackTrace();
+	   }
+	}
+	
 	//drop the EdepotItems table
 	public static void dropEdepotItem(Statement stmt){
 		System.out.println("dropped edepotitems table");
