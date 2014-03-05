@@ -18,26 +18,26 @@ public class Main {
 	public static void print_all() throws SQLException, IOException{
 		// Connect to the database
 		String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
-		String strUsername = "alexander_simes";
-		String strPassword = "4998837";
+		String strUsername = "ramonrovirosa";
+		String strPassword = "4935854";
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 
 		// Create a Statement
 		Statement stmt = conn.createStatement();
 
 		//create EdepotItems table
-		EdepotItems.dropEdepotItem(stmt);
-		createTable(EdepotItems.create_table_sql, stmt);
-		EdepotItems.insertEdepotItem(1,"firstitem", stmt);
-		EdepotItems.insertEdepotItem(2,"seconditem", stmt);
-		EdepotItems.printall(stmt);
-		EdepotItems.getNamebyStockNO(2, stmt);
-		EdepotItems.getNamebyStockNO(1, stmt);
-		EdepotItems.removebystockno(2,stmt);
-		EdepotItems.printall(stmt);
+//		EdepotItems.dropEdepotItem(stmt);
+//		createTable(EdepotItems.create_table_sql, stmt);
+//		EdepotItems.insertEdepotItem(1,"firstitem", stmt);
+//		EdepotItems.insertEdepotItem(2,"seconditem", stmt);
+//		EdepotItems.printall(stmt);
+//		EdepotItems.getNamebyStockNO(2, stmt);
+//		EdepotItems.getNamebyStockNO(1, stmt);
+//		EdepotItems.removebystockno(2,stmt);
+//		EdepotItems.printall(stmt);
 		
-		ConsoleUI.initialPrompt();
-
+//		createTable(EmartCustomer.create_table_sql,stmt);
+		EmartCustomers.insertEmartCustomer(200, "Brenda", stmt);
 
 		
 		conn.close();
