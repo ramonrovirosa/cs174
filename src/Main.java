@@ -36,9 +36,11 @@ public class Main {
 //		EdepotItems.removebystockno(2,stmt);
 //		EdepotItems.printall(stmt);
 		
-//		createTable(EmartCustomer.create_table_sql,stmt);
-		EmartCustomers.insertEmartCustomer(200, "Brenda", stmt);
-
+//		createTable(EmartCustomers.create_table_sql,stmt);
+//		EmartCustomers.insertEmartCustomer(200, "Brenda", stmt);
+//		EmartCustomers.insertEmartCustomer(10, "Ramon", stmt);
+//		EmartCustomers.insertEmartCustomer(50, "Alex", stmt);
+		EmartCustomers.updateEmartCustomerOrderAndStatus(10, 200, stmt);
 		
 		conn.close();
 	}
