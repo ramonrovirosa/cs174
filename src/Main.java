@@ -18,8 +18,8 @@ public class Main {
 	public static void print_all() throws SQLException, IOException{
 		// Connect to the database
 		String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
-		String strUsername = "ramonrovirosa";
-		String strPassword = "4935854";
+		String strUsername = "alexander_simes";
+		String strPassword = "4998837";
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 
 		// Create a Statement
@@ -36,12 +36,14 @@ public class Main {
 //		EdepotItems.removebystockno(2,stmt);
 //		EdepotItems.printall(stmt);
 		
-//		createTable(EmartCustomers.create_table_sql,stmt);
+		EmartCustomers.dropEmartCustomer(stmt);
+		createTable(EmartCustomers.create_table_sql,stmt);
 //		EmartCustomers.insertEmartCustomer(200, "Brenda", stmt);
 //		EmartCustomers.insertEmartCustomer(10, "Ramon", stmt);
 //		EmartCustomers.insertEmartCustomer(50, "Alex", stmt);
 //		EmartCustomers.removeByCustomerID(10, stmt);
 		
+		ConsoleUI.initialPrompt(stmt);
 		EmartCustomers.printall(stmt);
 		
 		conn.close();

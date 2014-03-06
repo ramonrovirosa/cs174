@@ -89,7 +89,7 @@ public class EmartCustomers {
 	   }
 	}
 	//drop the EmartCustomers table
-		public static void dropEdepotItem(Statement stmt){
+		public static void dropEmartCustomer(Statement stmt){
 			try{
 				stmt.executeUpdate("drop table EmartCustomers");
 				System.out.println("dropped edepotitems table");
