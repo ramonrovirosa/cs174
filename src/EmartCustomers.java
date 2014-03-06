@@ -40,7 +40,6 @@ public class EmartCustomers {
 	
 	public static void updateEmartCustomerOrderAndStatus(int customerID, int totalCost, Statement stmt){
 		ResultSet rs1;
-		
 		String order1="SELECT * From  EmartCustomers C WHERE C.customerID =" + customerID; 
 		try{
 			//get previous orders 1 & 2 for customers
@@ -58,6 +57,29 @@ public class EmartCustomers {
 		  System.out.println(se);
 	      se.printStackTrace();
 	   }
+	}
+	//remove by Customer ID
+	public static void removeByCustomerID(int customerID, Statement stmt){
+		String sql = "DELETE FROM EmartCustomers WHERE customerID = "+customerID;
+		try{
+			stmt.executeUpdate(sql);
+			System.out.println("removed customer "+customerID+" from the database");
+		}catch(SQLException se){
+	      //Handle errors for JDBC
+		  System.out.println(se);
+	      se.printStackTrace();
+	   }
+	}
+	//drop the EmartCustomers table
+		public static void dropEdepotItem(Statement stmt){
+			try{
+				stmt.executeUpdate("drop table EmartCustomers");
+				System.out.println("dropped edepotitems table");
+			}catch(SQLException se){
+			      //Handle errors for JDBC
+				  System.out.println(se);
+			      se.printStackTrace();
+			}
 	}
 	private static void updateOrderStatus(String sql, Statement stmt){
 		try{
@@ -88,5 +110,6 @@ public class EmartCustomers {
 				 "Where "+ " customerID='"+customerID +"'";
 		return sql;
 	}
+	
 	
 }

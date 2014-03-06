@@ -40,7 +40,7 @@ public class Main {
 //		EmartCustomers.insertEmartCustomer(200, "Brenda", stmt);
 //		EmartCustomers.insertEmartCustomer(10, "Ramon", stmt);
 //		EmartCustomers.insertEmartCustomer(50, "Alex", stmt);
-		EmartCustomers.updateEmartCustomerOrderAndStatus(10, 200, stmt);
+//		EmartCustomers.removeByCustomerID(10, stmt);
 		
 		conn.close();
 	}
