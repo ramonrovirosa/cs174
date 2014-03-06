@@ -42,6 +42,8 @@ public class Main {
 //		EmartCustomers.insertEmartCustomer(50, "Alex", stmt);
 //		EmartCustomers.removeByCustomerID(10, stmt);
 		
+		EmartCustomers.printall(stmt);
+		
 		conn.close();
 	}
 	public static void createTable(String sql, Statement stmt){

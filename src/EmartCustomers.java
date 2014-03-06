@@ -58,6 +58,24 @@ public class EmartCustomers {
 	      se.printStackTrace();
 	   }
 	}
+	//print whole table
+	public static void printall( Statement stmt) throws SQLException{
+		ResultSet rs = stmt.executeQuery ("select * from EmartCustomers");
+		   
+		// Iterate through the result and print the data
+		System.out.println("contents of EmartCustomers:");
+		while(rs.next()){
+			// Get the value from column "columnName" with integer type
+			System.out.println("("+rs.getInt("customerID")+","+
+								   rs.getString("name")+")"+","+
+								   rs.getString("status")+")"+","+
+								   rs.getInt("order1")+","+
+								   rs.getInt("order2")+","+
+								   rs.getInt("order3") 
+							);
+		}
+		rs.close();
+	}
 	//remove by Customer ID
 	public static void removeByCustomerID(int customerID, Statement stmt){
 		String sql = "DELETE FROM EmartCustomers WHERE customerID = "+customerID;
