@@ -92,7 +92,7 @@ public class EmartCustomers {
 		public static void dropEmartCustomer(Statement stmt){
 			try{
 				stmt.executeUpdate("drop table EmartCustomers");
-				System.out.println("dropped edepotitems table");
+				System.out.println("dropped EmartCustomers table");
 			}catch(SQLException se){
 			      //Handle errors for JDBC
 				  System.out.println(se);
