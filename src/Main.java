@@ -44,8 +44,8 @@ public class Main {
 //		EmartCustomers.removeByCustomerID(10, stmt);
 //		EmartCustomers.printall(stmt);
 //		EmartCustomers.updateStatus(10, "Gold", stmt);
-		EmartCustomers.printall(stmt);
-		EmartCustomers.customerStatus(10,stmt);
+//		EmartCustomers.printall(stmt);
+//		EmartCustomers.customerStatus(10,stmt);
 		
 //		ConsoleUI.initialPrompt(stmt);
 //		EmartCustomers.printall(stmt);
@@ -58,6 +58,10 @@ public class Main {
 //		EmartItems.removeByStockNo(10, stmt);
 //		EmartItems.printall(stmt);
 		
+//		DiscAndShipPrcnt.dropDiscAndShipPrcnt(stmt);
+//		createTable(DiscAndShipPrcnt.create_table_sql,stmt);
+//		DiscAndShipPrcnt.insertDefaults(stmt);
+		DiscAndShipPrcnt.updatePercentage("Gold",10,stmt);
 		
 //		System.out.println(EmartCart.create_table_sql);
 //		createTable(EmartCart.create_table_sql,stmt);
@@ -68,7 +72,7 @@ public class Main {
 //		EmartCart.decrementQuantity(30, 1, stmt);
 //		EmartCart.printall(stmt);
 //		EmartCart.cartTotalWithoutTaxOrShipping(stmt);
-		EmartCart.customerStatus(stmt);
+//		EmartCart.customerStatus(stmt);
 		
 		conn.close();
 	}
