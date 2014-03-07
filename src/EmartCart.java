@@ -98,7 +98,7 @@ public class EmartCart {
 	   }
 	}
 	//remove a quantity of an item from the cart
-	public static void removeQuantityOfItemFromCart(int itemID, int quantity, Statement stmt){
+	public static void decrementQuantity(int itemID, int quantity, Statement stmt){
 		ResultSet rs1;
 		String queryItems = "SELECT C.quantity " +
 							" From EmartCart C "+
@@ -117,10 +117,74 @@ public class EmartCart {
 		}
 	}
 	
+	//drop table
+	public static void dropEmartCustomer(Statement stmt){
+		try{
+			stmt.executeUpdate("drop table EmartCart");
+			System.out.println("dropped EmartCart table");
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			  System.out.println(se);
+		      se.printStackTrace();
+		}
+	}
+	
 	//Calculate cart total price
 	//gold customer 10% off order
 	//silver 5% off order
 	//10% shipping & handling fee if total less than or equal $100
+	public static int cartTotalWithoutTaxOrShipping(Statement stmt){
+		ResultSet rs1;
+		String query = "SELECT C.quantity, A.price "+
+					   " FROM EmartCart C, EmartItems A "+
+					   " WHERE C.itemID=A.stockno";
+		int total=0;
+//		System.out.println(query);
+		try{
+			//get previous orders 1 & 2 for customers
+			rs1 = stmt.executeQuery(query);
+			while(rs1.next()){
+				total+=rs1.getInt("quantity")*rs1.getInt("price");
+			}
+			System.out.println("Cart total: $"+total);
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			  System.out.println(se);
+		      se.printStackTrace();
+		}
+		return total;
+	}
+	
+	//getCustomerStatus
+	public static String customerStatus(Statement stmt){
+		ResultSet rs,rs1;
+		String status="";
+		int customerID = 0;
+		String queryID="SELECT C.customerID From  EmartCart C ";
+		try{
+			rs = stmt.executeQuery(queryID);
+			rs.next();
+			customerID = rs.getInt("customerID");
+			System.out.println("customerID: "+ customerID);
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			  System.out.println(se);
+		      se.printStackTrace();
+		}
+		//now get status based on customer id
+		String getStatus="SELECT C.status From  EmartCustomers C WHERE C.customerID =" + customerID; 
+		try{
+			rs1 = stmt.executeQuery(getStatus);
+			rs1.next();
+			status = rs1.getString("status");
+			System.out.println("status: "+status);
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			  System.out.println(se);
+		      se.printStackTrace();
+		}
+		return status;
+	}
 	
 //	print all items in cart
 	public static void printall( Statement stmt) throws SQLException{

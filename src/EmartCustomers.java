@@ -141,6 +141,20 @@ public class EmartCustomers {
 				 "Where "+ " customerID='"+customerID +"'";
 		return sql;
 	}
-	
-	
+	public static String customerStatus(int customerID, Statement stmt){
+		ResultSet rs1;
+		String status="";
+		String order1="SELECT C.status From  EmartCustomers C WHERE C.customerID =" + customerID; 
+		try{
+			rs1 = stmt.executeQuery(order1);
+			rs1.next();
+			status = rs1.getString("status");
+			System.out.println(status);
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			  System.out.println(se);
+		      se.printStackTrace();
+		}
+		return status;
+	}
 }
