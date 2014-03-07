@@ -35,7 +35,6 @@ public class EmartCart {
 			else{
 				//update instead of insert
 				int prevQuantity = rs1.getInt("quantity");
-				System.out.println(quantity);
 				quantity=quantity+prevQuantity;
 				updateCart(itemID,quantity, stmt);
 			}
@@ -87,8 +86,36 @@ public class EmartCart {
 	   }
 	}
 	//Delete Items from the cart
-	
-	//Update item
+	public static void deleteItemFromCart(int itemID, Statement stmt){
+		String sql = "DELETE FROM EmartCart WHERE itemID = "+itemID;
+		try{
+			stmt.executeUpdate(sql);
+			System.out.println("removed EmartCart "+itemID+" from the database");
+		}catch(SQLException se){
+	      //Handle errors for JDBC
+		  System.out.println(se);
+	      se.printStackTrace();
+	   }
+	}
+	//remove a quantity of an item from the cart
+	public static void removeQuantityOfItemFromCart(int itemID, int quantity, Statement stmt){
+		ResultSet rs1;
+		String queryItems = "SELECT C.quantity " +
+							" From EmartCart C "+
+							" Where C.itemID='"+itemID + "'";
+		try{
+			//get previous orders 1 & 2 for customers
+			rs1 = stmt.executeQuery(queryItems);
+			rs1.next();
+			int prevQuantity = rs1.getInt("quantity");
+			quantity=prevQuantity-quantity;
+			updateCart(itemID,quantity, stmt);
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			  System.out.println(se);
+		      se.printStackTrace();
+		}
+	}
 	
 	//Calculate cart total price
 	//gold customer 10% off order
