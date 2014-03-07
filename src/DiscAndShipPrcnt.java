@@ -28,6 +28,12 @@ public class DiscAndShipPrcnt {
 												   ") "+
 									"Values (" + "'" + "Green" + "',"
 											   + "'" + 0 + "')";
+		String newUser = "INSERT INTO DiscAndShipPrcnt ("+
+													   "name,"+
+													   "percentage"+
+													   ") "+
+											"Values (" + "'" + "New" + "',"
+													   + "'" + 0 + "')";
 		String shipping = "INSERT INTO DiscAndShipPrcnt ("+
 													   "name,"+
 													   "percentage"+
@@ -38,6 +44,7 @@ public class DiscAndShipPrcnt {
 			stmt.executeUpdate(gold);
 			stmt.executeUpdate(silver);
 			stmt.executeUpdate(green);
+			stmt.executeUpdate(newUser);
 			stmt.executeUpdate(shipping);
 			System.out.println(shipping);
 		}catch(SQLException se){

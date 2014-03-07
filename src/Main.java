@@ -61,7 +61,7 @@ public class Main {
 //		DiscAndShipPrcnt.dropDiscAndShipPrcnt(stmt);
 //		createTable(DiscAndShipPrcnt.create_table_sql,stmt);
 //		DiscAndShipPrcnt.insertDefaults(stmt);
-		DiscAndShipPrcnt.updatePercentage("Gold",10,stmt);
+//		DiscAndShipPrcnt.updatePercentage("Gold",10,stmt);
 		
 //		System.out.println(EmartCart.create_table_sql);
 //		createTable(EmartCart.create_table_sql,stmt);
@@ -73,7 +73,10 @@ public class Main {
 //		EmartCart.printall(stmt);
 //		EmartCart.cartTotalWithoutTaxOrShipping(stmt);
 //		EmartCart.customerStatus(stmt);
-		
+//		EmartCart.getShippingPcnt(stmt);
+//		EmartCart.getStatusDiscount(stmt);
+		int a =EmartCart.calculateGrantCartTotal(EmartCart.cartTotalWithoutTaxOrShipping(stmt), EmartCart.getStatusDiscount(stmt), EmartCart.getShippingPcnt(stmt));
+		System.out.println("Grand Total: "+ a);
 		conn.close();
 	}
 	public static void createTable(String sql, Statement stmt){

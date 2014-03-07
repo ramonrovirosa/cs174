@@ -185,7 +185,48 @@ public class EmartCart {
 		}
 		return status;
 	}
-	
+	//shipping percentage
+	public static int getShippingPcnt(Statement stmt){
+		ResultSet rs,rs1;
+		int percent = 0;
+		String queryPcnt="SELECT C.percentage From  DiscAndShipPrcnt C WHERE C.name = 'Shipping' ";
+		try{
+			rs = stmt.executeQuery(queryPcnt);
+			rs.next();
+			percent = rs.getInt("percentage");
+			System.out.println("percentage: "+ percent);
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			  System.out.println(se);
+		      se.printStackTrace();
+		}
+		return percent;
+	}
+	//status discount
+	public static int getStatusDiscount(Statement stmt){
+		ResultSet rs,rs1;
+		String status=customerStatus(stmt);
+		int percent = 0;
+		String queryPcnt="SELECT C.percentage From  DiscAndShipPrcnt C WHERE C.name ='"+status+"'";
+		try{
+			rs = stmt.executeQuery(queryPcnt);
+			rs.next();
+			percent = rs.getInt("percentage");
+//			System.out.println("percentage: "+ percent);
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			  System.out.println(se);
+		      se.printStackTrace();
+		}
+		return percent;
+	}
+	//CalculateGrandTotal
+	public static int calculateGrantCartTotal(int preTotal, int discount, int shipping ){
+		if(preTotal > 100) 
+			shipping = 0;
+		Double disc = preTotal*discount*.01;
+		return preTotal - disc.intValue() + shipping;
+	}
 //	print all items in cart
 	public static void printall( Statement stmt) throws SQLException{
 		ResultSet rs = stmt.executeQuery ("select * from EmartCart");
