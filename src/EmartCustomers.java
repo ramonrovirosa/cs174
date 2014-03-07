@@ -108,6 +108,19 @@ public class EmartCustomers {
 		      se.printStackTrace();
 		}
 	}
+	public static void updateStatus(int customerID, String status, Statement stmt){
+		String sql = "Update EmartCustomers "+
+				 " SET status='" + status +"'"+
+				 " Where "+ " customerID='"+customerID +"'";
+		try{
+			System.out.println(sql);
+			stmt.executeUpdate(sql);
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			  System.out.println(se);
+		      se.printStackTrace();
+		}
+	}
 	private static String getStatusAndUpdate(int orders[]){
 		int orderTotals = orders[0]+orders[1]+orders[2];
 		if(orderTotals > 500)

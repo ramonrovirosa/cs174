@@ -1,0 +1,7 @@
+How to access oracls sql server:
+
+//Ramon Rovirosa
+
+ssh ramonrovirosa@snoopy.cs.ucsb.edu
+sqlplus64 /nolog
+connect ramonrovirosa/4935854@uml.cs.ucsb.edu:1521/xexdb
