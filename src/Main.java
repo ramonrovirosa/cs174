@@ -4,6 +4,9 @@ import java.sql.*;
 
 public class Main {
 	static Connection conn;
+	static String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
+	static String strUsername = "alexander_simes";
+	static String strPassword = "4998837";
 	public static void main(String[] args) throws SQLException, IOException {
 		// 1. Load the Oracle JDBC driver for this program
 		try {
@@ -18,8 +21,8 @@ public class Main {
 	public static void print_all() throws SQLException, IOException{
 		// Connect to the database
 		String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
-		String strUsername = "ramonrovirosa";
-		String strPassword = "4935854";
+		String strUsername = "alexander_simes";
+		String strPassword = "4998837";
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 
 		// Create a Statement
@@ -36,8 +39,8 @@ public class Main {
 //		EdepotItems.removebystockno(2,stmt);
 //		EdepotItems.printall(stmt);
 		
-//		EmartCustomers.dropEmartCustomer(stmt);
-//		createTable(EmartCustomers.create_table_sql,stmt);
+		EmartCustomers.dropEmartCustomer(stmt);
+		createTable(EmartCustomers.create_table_sql,stmt);
 //		EmartCustomers.insertEmartCustomer(200, "Brenda", stmt);
 //		EmartCustomers.insertEmartCustomer(10, "Ramon", stmt);
 //		EmartCustomers.insertEmartCustomer(50, "Alex", stmt);
@@ -47,7 +50,7 @@ public class Main {
 //		EmartCustomers.printall(stmt);
 //		EmartCustomers.customerStatus(10,stmt);
 		
-//		ConsoleUI.initialPrompt(stmt);
+		ConsoleUI.initialPrompt(stmt);
 //		EmartCustomers.printall(stmt);
 //		EmartItems.insertEmartItem(20, "Desk", 3, 40, stmt);
 //		EmartItems.insertEmartItem(10, "Book", 100, 40, stmt);

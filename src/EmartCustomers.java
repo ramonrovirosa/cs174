@@ -76,6 +76,8 @@ public class EmartCustomers {
 		}
 		rs.close();
 	}
+	
+	
 	//remove by Customer ID
 	public static void removeByCustomerID(int customerID, Statement stmt){
 		String sql = "DELETE FROM EmartCustomers WHERE customerID = "+customerID;
@@ -141,7 +143,7 @@ public class EmartCustomers {
 				 "Where "+ " customerID='"+customerID +"'";
 		return sql;
 	}
-	public static String customerStatus(int customerID, Statement stmt){
+	public static String getCustomerStatus(int customerID, Statement stmt){
 		ResultSet rs1;
 		String status="";
 		String order1="SELECT C.status From  EmartCustomers C WHERE C.customerID =" + customerID; 
@@ -156,5 +158,21 @@ public class EmartCustomers {
 		      se.printStackTrace();
 		}
 		return status;
+	}
+	
+	public static String getCustomerName(int customerID, Statement stmt){
+		ResultSet rs1;
+		String name="";
+		String order1="SELECT C.name From  EmartCustomers C WHERE C.customerID =" + customerID; 
+		try{
+			rs1 = stmt.executeQuery(order1);
+			rs1.next();
+			name = rs1.getString("name");
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			  System.out.println(se);
+		      se.printStackTrace();
+		}
+		return name;
 	}
 }
