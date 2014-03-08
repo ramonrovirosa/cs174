@@ -5,20 +5,19 @@ import java.sql.Statement;
 
 public class EmartCart {
 	//create cart table
-	//cartid,itemid,name,customerid,quantity
+	//itemid,name,customerid,quantity
 	static String create_table_sql = "CREATE TABLE EmartCart " +
-            "(cartID INTEGER not NULL, " +
-            " itemID INTEGER, " + 
+            "(itemID INTEGER, " + 
             " customerID INTEGER, " +
             " name CHAR(20), " +
             " quantity INTEGER, " +
-            " PRIMARY KEY ( cartID, itemID ),"+
+            " PRIMARY KEY ( customerID, itemID ),"+
             " FOREIGN KEY (itemID) REFERENCES EmartItems (stockno)," +
             " FOREIGN KEY (customerID) REFERENCES EmartCustomers (customerID) )";
 	
 	
 	//Add items to the cart
-	public static void insertItemInCart(int cartID, int itemID, int customerID, String name, int quantity, Statement stmt ){
+	public static void insertItemInCart( int itemID, int customerID, String name, int quantity, Statement stmt ){
 		//first check if item is already in cart...and if it is do an update else do insert
 		//first check if item is in cart
 		ResultSet rs1;
@@ -31,7 +30,7 @@ public class EmartCart {
 			rs1 = stmt.executeQuery(queryItems);
 			//returned nothing, insert brand new item...
 			if(!rs1.next()){
-				executeInsertQuery(cartID,itemID,customerID,name,quantity, stmt);
+				executeInsertQuery(itemID,customerID,name,quantity, stmt);
 			}
 			else{
 				//update instead of insert
@@ -65,16 +64,14 @@ public class EmartCart {
 		}
 	}
 	
-	private static void executeInsertQuery(int cartID, int itemID, int customerID, String name, int quantity, Statement stmt){
+	private static void executeInsertQuery( int itemID, int customerID, String name, int quantity, Statement stmt){
 		String sql = "INSERT INTO EmartCart ("+
-				   "cartID,"+
 				   "itemID,"+
 				   "customerID,"+
 				   "name,"+
 				   "quantity"+
 				   ") "+
-	"Values (" + "'" + cartID + "',"
-			   + "'" + itemID + "'," 
+	"Values (" + "'" + itemID + "'," 
 			   + "'" + customerID + "'," 
 			   + "'" + name + "'," 
 			   + "'" + quantity + "')";	
@@ -240,9 +237,21 @@ public class EmartCart {
 		System.out.println("contents of EmartCart:");
 		while(rs.next()){
 			// Get the value from column "columnName" with integer type
-			System.out.println("("+rs.getInt("cartID")+","+
-								   rs.getInt("itemID")+","+
+			System.out.println("("+rs.getInt("itemID")+","+
 								   rs.getInt("customerID")+","+
+								   rs.getString("name")+","+
+								   rs.getInt("quantity")+")" 
+							);
+		}
+		rs.close();
+	}
+	
+	public static void printCustomerCart( Statement stmt, Integer id) throws SQLException{
+		ResultSet rs = stmt.executeQuery ("select * from EmartCart where customerID ="+id);
+		// Iterate through the result and print the data
+		while(rs.next()){
+			// Get the value from column "columnName" with integer type
+			System.out.println("("+rs.getInt("itemID")+","+
 								   rs.getString("name")+","+
 								   rs.getInt("quantity")+")" 
 							);
