@@ -20,9 +20,6 @@ public class Main {
 	}
 	public static void print_all() throws SQLException, IOException{
 		// Connect to the database
-		String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
-		String strUsername = "alexander_simes";
-		String strPassword = "4998837";
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 
 		// Create a Statement
@@ -39,8 +36,8 @@ public class Main {
 //		EdepotItems.removebystockno(2,stmt);
 //		EdepotItems.printall(stmt);
 		
-		EmartCustomers.dropEmartCustomer(stmt);
-		createTable(EmartCustomers.create_table_sql,stmt);
+//		EmartCustomers.dropEmartCustomer(stmt);
+//		createTable(EmartCustomers.create_table_sql,stmt);
 //		EmartCustomers.insertEmartCustomer(200, "Brenda", stmt);
 //		EmartCustomers.insertEmartCustomer(10, "Ramon", stmt);
 //		EmartCustomers.insertEmartCustomer(50, "Alex", stmt);
@@ -49,8 +46,9 @@ public class Main {
 //		EmartCustomers.updateStatus(10, "Gold", stmt);
 //		EmartCustomers.printall(stmt);
 //		EmartCustomers.customerStatus(10,stmt);
-		
-		ConsoleUI.initialPrompt(stmt);
+
+//		EmartItems.dropEmartItems(stmt);
+//		createTable(EmartItems.create_table_sql,stmt);
 //		EmartCustomers.printall(stmt);
 //		EmartItems.insertEmartItem(20, "Desk", 3, 40, stmt);
 //		EmartItems.insertEmartItem(10, "Book", 100, 40, stmt);
@@ -81,12 +79,24 @@ public class Main {
 //		EmartCart.cartTotalWithoutTaxOrShipping(10,stmt);
 //		EmartCart.customerStatus(10,stmt);
 //		EmartCart.getShippingPcnt(stmt);
-		EmartCart.getStatusDiscount(10,stmt);
+		//EmartCart.getStatusDiscount(10,stmt);
 //		int a =EmartCart.calculateGrantCartTotal(EmartCart.cartTotalWithoutTaxOrShipping(stmt), EmartCart.getStatusDiscount(stmt), EmartCart.getShippingPcnt(stmt));
 //		System.out.println("Grand Total: "+ a);
-//		EmartCart.dropEmartCart(stmt);
+
+		//resetDB(stmt);
+		ConsoleUI.initialPrompt(stmt);
 		conn.close();
 	}
+	
+	public static void resetDB(Statement stmt){
+		EmartCart.dropEmartCart(stmt);
+		EdepotItems.dropEdepotItem(stmt);
+		EmartCustomers.dropEmartCustomer(stmt);
+		createTable(EdepotItems.create_table_sql, stmt);
+		createTable(EmartCustomers.create_table_sql,stmt);	
+		createTable(EmartCart.create_table_sql,stmt);
+	}
+	
 	public static void createTable(String sql, Statement stmt){
 		try{
 		stmt.executeUpdate(sql);

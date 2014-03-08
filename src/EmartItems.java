@@ -33,6 +33,13 @@ public class EmartItems {
 	   }
 	}
 	
+	public static String getItemName( Statement stmt, int stockno ) throws SQLException{
+		ResultSet rs = stmt.executeQuery("SELECT name from EmartItems where stockno ="+stockno);
+		rs.next();
+		String name = rs.getString("name");
+		return name;		
+	}
+	
 	//print all items
 	public static void printall( Statement stmt) throws SQLException{
 		ResultSet rs = stmt.executeQuery ("select * from EmartItems");
@@ -126,7 +133,7 @@ public class EmartItems {
 	   }
 	}
 	//drop table
-	public static void dropEmartCustomer(Statement stmt){
+	public static void dropEmartItems(Statement stmt){
 		try{
 			stmt.executeUpdate("drop table EmartItems");
 			System.out.println("dropped EmartItems table");
