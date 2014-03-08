@@ -68,18 +68,23 @@ public class Main {
 		
 //		System.out.println(EmartCart.create_table_sql);
 //		createTable(EmartCart.create_table_sql,stmt);
+//		EmartCart.insertItemInCart(101, 20, 10, "Desk", 5, stmt);
+//		EmartCart.insertItemInCart(101, 30, 10, "Blanket", 10, stmt);
+//		EmartCart.insertItemInCart(105, 20, 50, "Desk", 5, stmt);
+//		EmartCart.insertItemInCart(105, 30, 50, "Blanket", 10, stmt);
 //		EmartCart.printall(stmt);
 //		EmartCart.insertItemInCart(101, 20, 10, "Desk", 5, stmt);
 //		EmartCart.insertItemInCart(101, 30, 10, "Blanket", 10, stmt);
-//		EmartCart.deleteItemFromCart(20, stmt);
-//		EmartCart.decrementQuantity(30, 1, stmt);
+//		EmartCart.deleteItemFromCart(20, 50, stmt);
+//		EmartCart.decrementQuantity(30, 50, 5, stmt);
 //		EmartCart.printall(stmt);
-//		EmartCart.cartTotalWithoutTaxOrShipping(stmt);
-//		EmartCart.customerStatus(stmt);
+//		EmartCart.cartTotalWithoutTaxOrShipping(10,stmt);
+//		EmartCart.customerStatus(10,stmt);
 //		EmartCart.getShippingPcnt(stmt);
-//		EmartCart.getStatusDiscount(stmt);
-		int a =EmartCart.calculateGrantCartTotal(EmartCart.cartTotalWithoutTaxOrShipping(stmt), EmartCart.getStatusDiscount(stmt), EmartCart.getShippingPcnt(stmt));
-		System.out.println("Grand Total: "+ a);
+		EmartCart.getStatusDiscount(10,stmt);
+//		int a =EmartCart.calculateGrantCartTotal(EmartCart.cartTotalWithoutTaxOrShipping(stmt), EmartCart.getStatusDiscount(stmt), EmartCart.getShippingPcnt(stmt));
+//		System.out.println("Grand Total: "+ a);
+//		EmartCart.dropEmartCart(stmt);
 		conn.close();
 	}
 	public static void createTable(String sql, Statement stmt){

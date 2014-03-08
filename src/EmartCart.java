@@ -12,7 +12,7 @@ public class EmartCart {
             " customerID INTEGER, " +
             " name CHAR(20), " +
             " quantity INTEGER, " +
-            " PRIMARY KEY ( cartID, itemID, customerID ),"+
+            " PRIMARY KEY ( cartID, itemID ),"+
             " FOREIGN KEY (itemID) REFERENCES EmartItems (stockno)," +
             " FOREIGN KEY (customerID) REFERENCES EmartCustomers (customerID) )";
 	
@@ -24,7 +24,8 @@ public class EmartCart {
 		ResultSet rs1;
 		String queryItems = "SELECT C.quantity " +
 							" From EmartCart C "+
-							" Where C.itemID='"+itemID + "'";
+							" Where C.itemID='"+itemID + "'" +
+							" AND C.customerID ='"+customerID+"'";
 		try{
 			//get previous orders 1 & 2 for customers
 			rs1 = stmt.executeQuery(queryItems);
@@ -36,7 +37,7 @@ public class EmartCart {
 				//update instead of insert
 				int prevQuantity = rs1.getInt("quantity");
 				quantity=quantity+prevQuantity;
-				updateCart(itemID,quantity, stmt);
+				updateCart(itemID,quantity, customerID, stmt);
 			}
 			
 			//update item count in EmartItems???
@@ -48,12 +49,13 @@ public class EmartCart {
 	   }
 		
 	}
-	private static void updateCart(int itemID, int quantity, Statement stmt){
+	private static void updateCart(int itemID, int quantity,int customerID, Statement stmt){
 		String sql = "Update EmartCart "+
 				 " SET quantity='" + quantity + "' "+
-				 " Where "+ " itemID='"+itemID +"'";
+				 " Where "+ " itemID='"+itemID +"'" +
+				 " AND customerID ='"+customerID+"'";;
 		try{
-			System.out.println(sql);
+//			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			System.out.println(sql);
 		}catch(SQLException se){
@@ -86,8 +88,9 @@ public class EmartCart {
 	   }
 	}
 	//Delete Items from the cart
-	public static void deleteItemFromCart(int itemID, Statement stmt){
-		String sql = "DELETE FROM EmartCart WHERE itemID = "+itemID;
+	public static void deleteItemFromCart(int itemID, int customerID, Statement stmt){
+		String sql = "DELETE FROM EmartCart WHERE itemID = "+itemID+
+					 "AND customerID='"+customerID+"'";
 		try{
 			stmt.executeUpdate(sql);
 			System.out.println("removed EmartCart "+itemID+" from the database");
@@ -98,18 +101,19 @@ public class EmartCart {
 	   }
 	}
 	//remove a quantity of an item from the cart
-	public static void decrementQuantity(int itemID, int quantity, Statement stmt){
+	public static void decrementQuantity(int itemID, int customerID, int quantity,  Statement stmt){
 		ResultSet rs1;
 		String queryItems = "SELECT C.quantity " +
 							" From EmartCart C "+
-							" Where C.itemID='"+itemID + "'";
+							" Where C.itemID='"+itemID + "'"+
+							" AND C.customerID='"+customerID+"'";
 		try{
 			//get previous orders 1 & 2 for customers
 			rs1 = stmt.executeQuery(queryItems);
 			rs1.next();
 			int prevQuantity = rs1.getInt("quantity");
 			quantity=prevQuantity-quantity;
-			updateCart(itemID,quantity, stmt);
+			updateCart(itemID,quantity, customerID, stmt);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
@@ -118,7 +122,7 @@ public class EmartCart {
 	}
 	
 	//drop table
-	public static void dropEmartCustomer(Statement stmt){
+	public static void dropEmartCart(Statement stmt){
 		try{
 			stmt.executeUpdate("drop table EmartCart");
 			System.out.println("dropped EmartCart table");
@@ -133,11 +137,12 @@ public class EmartCart {
 	//gold customer 10% off order
 	//silver 5% off order
 	//10% shipping & handling fee if total less than or equal $100
-	public static int cartTotalWithoutTaxOrShipping(Statement stmt){
+	public static int cartTotalWithoutTaxOrShipping(int customerID, Statement stmt){
 		ResultSet rs1;
 		String query = "SELECT C.quantity, A.price "+
 					   " FROM EmartCart C, EmartItems A "+
-					   " WHERE C.itemID=A.stockno";
+					   " WHERE C.itemID=A.stockno"+
+					   " AND C.customerID='"+customerID+"'";
 		int total=0;
 //		System.out.println(query);
 		try{
@@ -156,21 +161,21 @@ public class EmartCart {
 	}
 	
 	//getCustomerStatus
-	public static String customerStatus(Statement stmt){
+	public static String customerStatus(int customerID, Statement stmt){
 		ResultSet rs,rs1;
 		String status="";
-		int customerID = 0;
-		String queryID="SELECT C.customerID From  EmartCart C ";
-		try{
-			rs = stmt.executeQuery(queryID);
-			rs.next();
-			customerID = rs.getInt("customerID");
-			System.out.println("customerID: "+ customerID);
-		}catch(SQLException se){
-		      //Handle errors for JDBC
-			  System.out.println(se);
-		      se.printStackTrace();
-		}
+//		int customerID = 0;
+//		String queryID="SELECT C.customerID From  EmartCart C ";
+//		try{
+//			rs = stmt.executeQuery(queryID);
+//			rs.next();
+//			customerID = rs.getInt("customerID");
+//			System.out.println("customerID: "+ customerID);
+//		}catch(SQLException se){
+//		      //Handle errors for JDBC
+//			  System.out.println(se);
+//		      se.printStackTrace();
+//		}
 		//now get status based on customer id
 		String getStatus="SELECT C.status From  EmartCustomers C WHERE C.customerID =" + customerID; 
 		try{
@@ -194,7 +199,7 @@ public class EmartCart {
 			rs = stmt.executeQuery(queryPcnt);
 			rs.next();
 			percent = rs.getInt("percentage");
-			System.out.println("percentage: "+ percent);
+			System.out.println("shipping percentage: "+ percent);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
@@ -203,16 +208,16 @@ public class EmartCart {
 		return percent;
 	}
 	//status discount
-	public static int getStatusDiscount(Statement stmt){
+	public static int getStatusDiscount(int customerID, Statement stmt){
 		ResultSet rs,rs1;
-		String status=customerStatus(stmt);
+		String status=customerStatus(customerID, stmt);
 		int percent = 0;
 		String queryPcnt="SELECT C.percentage From  DiscAndShipPrcnt C WHERE C.name ='"+status+"'";
 		try{
 			rs = stmt.executeQuery(queryPcnt);
 			rs.next();
 			percent = rs.getInt("percentage");
-//			System.out.println("percentage: "+ percent);
+			System.out.println("percentage: "+ percent);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
