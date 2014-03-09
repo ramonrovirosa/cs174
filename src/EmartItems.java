@@ -11,8 +11,22 @@ public class EmartItems {
             " quantity INTEGER, " +
             " PRIMARY KEY ( stockno ))";
 	
+	
+	public static void searchEmartItem(int stockno, Statement stmt) throws SQLException{
+		ResultSet rs = stmt.executeQuery ("select * from EmartItems where stockno ="+stockno);
+		System.out.println("Your search returned:");
+		while(rs.next()){
+			System.out.println("("+rs.getInt("stockno")+","+
+								   rs.getString("name")+")"+","+
+								   rs.getString("price")+")"+","+
+								   rs.getInt("quantity") 
+							);
+		}
+		rs.close();
+	}
+	
 	//insertEmartItem
-	public static void insertEmartItem(int stockno, String name, int quantity, int price, Statement stmt){
+	public static void insertEmartItem(int stockno, String name, int quantity, float price, Statement stmt){
 		String sql = "INSERT INTO EmartItems ("+
 												   "stockno,"+
 												   "name,"+

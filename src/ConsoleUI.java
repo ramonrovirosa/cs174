@@ -49,12 +49,13 @@ public class ConsoleUI {
 	}
 	
 	static void LoggedInCustomerHandler( Statement stmt, Integer id ) throws IOException, SQLException{
-		System.out.println("press 1 to view cart, press 2 to add items to cart, press 3 to view previous orders, press 4 to view your status, press 5 to search for items, press 0 to go back");
+		System.out.println("press 1 to view cart, press 2 to edit cart contents, press 3 to view previous orders, "
+				+ "\npress 4 to view your status, press 5 to search for items, press 0 to logout");
         String str = br.readLine();
         if(str.equals("1")){
         	CustomerViewCartHandler(stmt,id);
         }else if(str.equals("2")){
-        	CustomerAddItemsToCart(stmt, id);
+        	CustomerEditCart(stmt, id);
         }else if(str.equals("0")){
         	CustomerHandler(stmt);
         }else{
@@ -63,10 +64,37 @@ public class ConsoleUI {
         }	
 	}
 	
+	static void CustomerEditCart( Statement stmt, int id) throws NumberFormatException, IOException, SQLException{
+			System.out.println("press 1 to add items to cart, press 2 to remove items from cart, press 0 to go back");
+	        String str = br.readLine();
+			 if(str.equals("1")){
+		        	CustomerAddItemsToCart(stmt,id);
+		        }else if(str.equals("2")){
+		        	CustomerRemoveItemsCart(stmt,id);
+		        }else if(str.equals("0")){
+		        	LoggedInCustomerHandler(stmt,id);
+		        }else{
+		        	System.out.println("Could not read input...");
+		        	CustomerEditCart(stmt, id);
+		        }	
+	}
+
+	static void CustomerRemoveItemsCart( Statement stmt, int id) throws NumberFormatException, IOException, SQLException{
+		System.out.println("Enter stockno of item you would like to remove from cart, or press 0 to cancel");
+		int stock_no = Integer.parseInt(br.readLine());
+        if(stock_no==0){
+        	CustomerEditCart(stmt,id);
+        }
+        EmartCart.deleteItemFromCart(stock_no, id, stmt);
+	}
+
 	static void CustomerAddItemsToCart( Statement stmt, int id) throws NumberFormatException, IOException, SQLException{
 		while(true){
-			System.out.println("Enter stockno of item you would like to add to cart");
+			System.out.println("Enter stockno of item you would like to add to cart, or press 0 to cancel");
 			int stock_no = Integer.parseInt(br.readLine());
+	        if(stock_no==0){
+	        	break;
+	        }
 			System.out.println("How many would you like to add?");
 			int quantity = Integer.parseInt(br.readLine());
 			String item_name = EmartItems.getItemName(stmt, stock_no);
@@ -76,11 +104,11 @@ public class ConsoleUI {
 			if (rs.equals("n")){
 				break;
 			}else if(!rs.equals("y")){
-				System.out.println("Couldn't read input, going back to login menu");
-				LoggedInCustomerHandler(stmt, id);
+				System.out.println("Couldn't read input, going back to cart menu");
+				CustomerEditCart(stmt, id);
 			}
 		}
-		LoggedInCustomerHandler(stmt, id);
+		CustomerEditCart(stmt, id);
 	}
 	
 	static void CustomerViewCartHandler( Statement stmt, Integer id ) throws SQLException, IOException{
@@ -125,12 +153,61 @@ public class ConsoleUI {
         String str = br.readLine();
 		 if(str.equals("1")){
 	        	ManagerAddItemHandler(stmt);
+		 }else if(str.equals("2")){
+			 ManagerRemoveItemHandler(stmt);
+		 }else if(str.equals("3")){
+			 ManagerUpdateItemHandler(stmt);
 	     }else if(str.equals("0")){
 	        	ManagerHandler(stmt);
 	     }else{
 	        	System.out.println("Could not read input...");
 	        	ManagerEditCatalogHandler(stmt);
 	        }
+	}
+	
+	static void ManagerUpdateItemHandler(Statement stmt) throws NumberFormatException, IOException, SQLException{
+		while(true){
+		System.out.println("Please enter the stock no of the item you would like to update:");
+		int stockno = Integer.parseInt(br.readLine());
+		System.out.println("Press 1 to update price, press 2 to update quantity, press 0 to choose a new item");
+		String str = br.readLine();
+		 if(str.equals("1")){
+			 System.out.println("Please enter the new price:");
+			 
+		 }else if(str.equals("2")){
+			 System.out.println("Please enter the new quantity:");
+			 int quantity = Integer.parseInt(br.readLine());
+			 EmartItems.updateQuantity(stockno, quantity, stmt);
+		 }else if(str.equals("0")){
+			 ManagerEditCatalogHandler(stmt);
+		 }
+		 System.out.println("Would you like to edit antoher item? (y/n)");
+			String rs = br.readLine();
+			if (rs.equals("n")){
+				break;
+			}else if(!rs.equals("y")){
+				System.out.println("Couldn't read input, going back to manager menu");
+				ManagerHandler(stmt);
+			}
+		}
+		ManagerEditCatalogHandler(stmt);		 
+	}
+
+	static void ManagerRemoveItemHandler(Statement stmt) throws NumberFormatException, IOException, SQLException{
+		while(true){
+			System.out.println("Enter stockno of item to remove:");
+			int stockno = Integer.parseInt(br.readLine());
+			EmartItems.removeByStockNo(stockno, stmt);
+			System.out.println("Would you like to remove antoher item? (y/n)");
+			String rs = br.readLine();
+			if (rs.equals("n")){
+				break;
+			}else if(!rs.equals("y")){
+				System.out.println("Couldn't read input, going back to manager menu");
+				ManagerHandler(stmt);
+			}
+		}
+		ManagerEditCatalogHandler(stmt);
 	}
 	
 	static void ManagerAddItemHandler(Statement stmt) throws NumberFormatException, IOException, SQLException{
@@ -155,4 +232,5 @@ public class ConsoleUI {
 		}
 		ManagerEditCatalogHandler(stmt);
 	}
+
 }

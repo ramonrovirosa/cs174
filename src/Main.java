@@ -56,11 +56,12 @@ public class Main {
 //		System.out.println("Grand Total: "+ a);
 //		EmartCart.dropEmartCart(stmt);
 		
-		System.out.println(EmartAccessories.create_table_sql);
+		//System.out.println(EmartAccessories.create_table_sql);
 //		createTable(EmartAccessories.create_table_sql, stmt);
 //		EmartAccessories.insertAccessory(10, 20, stmt);
 //		EmartAccessories.deleteAccessory(10, 30, stmt);
-		EmartAccessories.printAccessory(10,stmt);
+		//EmartAccessories.printAccessory(10,stmt);
+		ConsoleUI.initialPrompt(stmt);
 		
 		
 		conn.close();

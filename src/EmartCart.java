@@ -90,7 +90,7 @@ public class EmartCart {
 					 "AND customerID='"+customerID+"'";
 		try{
 			stmt.executeUpdate(sql);
-			System.out.println("removed EmartCart "+itemID+" from the database");
+			System.out.println("removed EmartCart "+itemID+" from the cart");
 		}catch(SQLException se){
 	      //Handle errors for JDBC
 		  System.out.println(se);
