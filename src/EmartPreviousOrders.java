@@ -11,7 +11,7 @@ public class EmartPreviousOrders {
 						            " quantity INTEGER, " +
 						            " orderDate DATE, " +
 						            " price INTEGER,"+
-						            " PRIMARY KEY (orderno, customerID, itemID),"+
+						            " PRIMARY KEY (orderno, itemID),"+
 						            " FOREIGN KEY (itemID) REFERENCES EmartItems (stockno)," +
 						            " FOREIGN KEY (customerID) REFERENCES EmartCustomers (customerID) )";
 			
@@ -45,7 +45,7 @@ public class EmartPreviousOrders {
 			ResultSet rs = stmt.executeQuery ("select * from EmartPreviousOrders");
 
 			// Iterate through the result and print the data
-			System.out.println("contents of EdepotItems:");
+			System.out.println("contents of EmartPreviousOrders:");
 			System.out.println( "orderno, "+
 					"customerID, "+
 					"itemID, "+
@@ -58,8 +58,8 @@ public class EmartPreviousOrders {
 				System.out.println(rs.getInt("orderno")+"      "+
 						   rs.getInt("customerID")+"          "+
 						   rs.getInt("itemID")+"      "+
-						   rs.getInt("quantity")+"         "+
-						   rs.getString("orderDate").replaceAll("\\s+","")+"     "+
+						   rs.getInt("quantity")+"       "+
+						   rs.getDate("orderDate")+"  "+
 						   rs.getInt("price") 
 					);
 			}
@@ -80,7 +80,7 @@ public class EmartPreviousOrders {
 		
 		ResultSet rs = stmt.executeQuery (query);
 		   
-		System.out.println("EdepotItems before date "+ordersBeforeDate+":");
+		System.out.println("EmartPreviousOrders before date "+ordersBeforeDate+":");
 		System.out.println( "orderno, "+
 				"customerID, "+
 				"itemID, "+
@@ -101,8 +101,24 @@ public class EmartPreviousOrders {
 		rs.close();
 	}
 	
-	//run previous order by order#
+	//delete item from previous orders
+	public static void deletePreviousOrders(int orderno, int itemID, Statement stmt){
+		String sql = "DELETE FROM EmartPreviousOrders WHERE itemID = "+itemID+
+				 "AND orderno='"+orderno+"'";
+		try{
+			stmt.executeUpdate(sql);
+			System.out.println("removed EmartPreviousOrders from the database");
+		}catch(SQLException se){
+		 //Handle errors for JDBC
+			 System.out.println(se);
+		     se.printStackTrace();
+		}
+	}
 	
+	//run previous order by order#
+	public static void rerunPreviousOrder(int orderno, Statement stmt){
+		
+	}
 	
 	
 	public static void dropEmartPreviousOrders(Statement stmt){
