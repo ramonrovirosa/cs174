@@ -5,8 +5,8 @@ import java.sql.*;
 public class Main {
 	static Connection conn;
 	static String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
-	static String strUsername = "alexander_simes";
-	static String strPassword = "4998837";
+	static String strUsername = "ramonrovirosa";
+	static String strPassword = "4935854";
 	public static void main(String[] args) throws SQLException, IOException {
 		// 1. Load the Oracle JDBC driver for this program
 		try {
@@ -56,13 +56,17 @@ public class Main {
 //		System.out.println("Grand Total: "+ a);
 //		EmartCart.dropEmartCart(stmt);
 		
-		System.out.println(EmartAccessories.create_table_sql);
+//		System.out.println(EmartAccessories.create_table_sql);
 //		createTable(EmartAccessories.create_table_sql, stmt);
 //		EmartAccessories.insertAccessory(10, 20, stmt);
 //		EmartAccessories.deleteAccessory(10, 30, stmt);
-		EmartAccessories.printAccessory(10,stmt);
+//		EmartAccessories.printAccessory(10,stmt);
 		
-		
+//		System.out.println(EmartPreviousOrders.create_table_sql);
+//		createTable(EmartPreviousOrders.create_table_sql,stmt);
+//		EmartPreviousOrders.dropEmartPreviousOrders(stmt);
+//		EmartPreviousOrders.insertPreviousOrder(101, 10, 20, 3, "1/1/14", 50, stmt);
+		EmartPreviousOrders.printall(stmt);
 		conn.close();
 	}
 	
