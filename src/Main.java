@@ -66,7 +66,7 @@ public class Main {
 //		createTable(EmartPreviousOrders.create_table_sql,stmt);
 //		EmartPreviousOrders.dropEmartPreviousOrders(stmt);
 //		EmartPreviousOrders.insertPreviousOrder(101, 10, 40, 100, "2014-01-12", 500, stmt);
-		EmartPreviousOrders.printall(stmt);
+//		EmartPreviousOrders.printall(stmt);
 //		EmartPreviousOrders.findPreviousOrdersByDate("2015-01-12", "2010-01-12",stmt);
 //		EmartPreviousOrders.deletePreviousOrders(101, 20, stmt);
 		conn.close();
