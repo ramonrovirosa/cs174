@@ -9,7 +9,7 @@ public class EmartPreviousOrders {
 						            " customerID INTEGER not null, " + 
 						            " itemID INTEGER not null, " +
 						            " quantity INTEGER, " +
-						            " orderDate CHAR(20), " +
+						            " orderDate DATE, " +
 						            " price INTEGER,"+
 						            " PRIMARY KEY (orderno, customerID, itemID),"+
 						            " FOREIGN KEY (itemID) REFERENCES EmartItems (stockno)," +
@@ -27,8 +27,8 @@ public class EmartPreviousOrders {
 					" Values (" + "'" + orderno + "'," 
 							   + "'" + customerID + "'," 
 							   + "'" + itemID + "'," 
-							   + "'" + quantity + "'," 
-							   + "'" + orderDate + "'," 
+							   + "'" + quantity + "', " 
+							   + "TO_DATE(" +"'" + orderDate +"','yyyy-mm-dd"+ "')," 
 							   + "'" + price + "')";	
 		try{
 			stmt.executeUpdate(sql);
@@ -66,6 +66,40 @@ public class EmartPreviousOrders {
 			rs.close();
 		}
 	//find previous orders by date
+	//Date format yyyy-mm-dd
+	public static void findPreviousOrdersByDate(String ordersBeforeDate, String ordersAfterDate,  Statement stmt)throws SQLException{
+		//if you are only asked to check the orders before a certain date, then use the first if.
+		//if you are checking orders beetween a specified period than else
+		String query = "";
+		if(ordersAfterDate == ""){
+			query = "Select * FROM EmartPreviousOrders WHERE orderDate <= "+"TO_DATE(" +"'" + ordersBeforeDate +"','yyyy-mm-dd"+ "')";
+		}else{
+			query = "Select * FROM EmartPreviousOrders WHERE orderDate <= "+"TO_DATE(" +"'" + ordersBeforeDate +"','yyyy-mm-dd"+ "') AND orderDate >= "+"TO_DATE(" +"'" + ordersAfterDate +"','yyyy-mm-dd"+ "')";
+		}
+		
+		
+		ResultSet rs = stmt.executeQuery (query);
+		   
+		System.out.println("EdepotItems before date "+ordersBeforeDate+":");
+		System.out.println( "orderno, "+
+				"customerID, "+
+				"itemID, "+
+				"quantity, "+
+				"orderDate, "+
+				"price"
+				);
+		while(rs.next()){
+			// Get the value from column "columnName" with integer type
+			System.out.println(rs.getInt("orderno")+"      "+
+					   rs.getInt("customerID")+"          "+
+					   rs.getInt("itemID")+"      "+
+					   rs.getInt("quantity")+"         "+
+					   rs.getDate("orderDate")+"  "+
+					   rs.getInt("price") 
+				);
+		}
+		rs.close();
+	}
 	
 	//run previous order by order#
 	
