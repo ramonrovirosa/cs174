@@ -6,7 +6,7 @@ public class ConsoleUI {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 	static void initialPrompt(Statement stmt) throws IOException, SQLException{
-		System.out.print("Press 1 for customer interface, press 2 to manage emart, press 3 to manage edepot, press 0 to exit for\n");
+		System.out.print("Press 1 for customer interface, press 2 to manage emart, press 3 to manage edepot, press 0 to exit\n");
         String str = br.readLine();
         if (str.equals("1")){
         	CustomerHandler(stmt);
@@ -40,22 +40,31 @@ public class ConsoleUI {
 	
 	static void LoginCustomerHandler( Statement stmt ) throws IOException, SQLException{
 	    System.out.println("Current Customers in our system:");
-	    EmartCustomers.printall(stmt);
+	    EmartCustomers.printallformatted(stmt);
 	    System.out.println("Please enter customer ID you wish to log in as:");
         Integer id = Integer.parseInt(br.readLine());
         String name = EmartCustomers.getCustomerName(id,stmt);
-        System.out.println("Welcome "+name+"!");
+        System.out.println("Welcome "+name.trim()+"!");
         LoggedInCustomerHandler( stmt, id );
 	}
 	
 	static void LoggedInCustomerHandler( Statement stmt, Integer id ) throws IOException, SQLException{
 		System.out.println("press 1 to view cart, press 2 to edit cart contents, press 3 to view previous orders, "
-				+ "\npress 4 to view your status, press 5 to search for items, press 0 to logout");
+				+ "\npress 4 to view your status, press 5 to checkout, press 0 to logout");
         String str = br.readLine();
         if(str.equals("1")){
         	CustomerViewCartHandler(stmt,id);
         }else if(str.equals("2")){
         	CustomerEditCart(stmt, id);
+        }else if(str.equals("3")){
+        	EmartPreviousOrders.printallcustomer(id,stmt);
+        	LoggedInCustomerHandler(stmt,id);
+        }else if(str.equals("4")){
+        	System.out.println("Your current customer status is: "+EmartCustomers.getCustomerStatus(id, stmt).trim());
+        	LoggedInCustomerHandler(stmt,id);
+        }else if(str.equals("5")){
+        	EmartCart.checkoutCart(id,stmt);
+        	LoggedInCustomerHandler(stmt,id);
         }else if(str.equals("0")){
         	CustomerHandler(stmt);
         }else{
@@ -65,27 +74,38 @@ public class ConsoleUI {
 	}
 	
 	static void CustomerEditCart( Statement stmt, int id) throws NumberFormatException, IOException, SQLException{
-			System.out.println("press 1 to add items to cart, press 2 to remove items from cart, press 0 to go back");
+			System.out.println("press 1 to add items to cart, press 2 to search for items, press 3 to remove items from cart, press 0 to go back");
 	        String str = br.readLine();
-			 if(str.equals("1")){
+			if(str.equals("1")){
 		        	CustomerAddItemsToCart(stmt,id);
-		        }else if(str.equals("2")){
+			}else if(str.equals("2")){
+				EmartItems.printallformatted(stmt);
+	        	CustomerEditCart(stmt,id);
+		    }else if(str.equals("3")){
 		        	CustomerRemoveItemsCart(stmt,id);
-		        }else if(str.equals("0")){
+		    }else if(str.equals("0")){
 		        	LoggedInCustomerHandler(stmt,id);
-		        }else{
+		    }else{
 		        	System.out.println("Could not read input...");
 		        	CustomerEditCart(stmt, id);
-		        }	
+		    }	
+			CustomerEditCart(stmt,id);
 	}
 
 	static void CustomerRemoveItemsCart( Statement stmt, int id) throws NumberFormatException, IOException, SQLException{
 		System.out.println("Enter stockno of item you would like to remove from cart, or press 0 to cancel");
 		int stock_no = Integer.parseInt(br.readLine());
+		System.out.println("Enter quantity you wish to remove from cart, enter 'all' to remove all");
+		String q = br.readLine();
         if(stock_no==0){
         	CustomerEditCart(stmt,id);
+        }else{
+        	if(q.equals("all")){
+        		EmartCart.deleteItemFromCart(stock_no, id, stmt);
+        	}else{
+        		EmartCart.decrementQuantity(stock_no,id, Integer.parseInt(q),stmt);
+        	}
         }
-        EmartCart.deleteItemFromCart(stock_no, id, stmt);
 	}
 
 	static void CustomerAddItemsToCart( Statement stmt, int id) throws NumberFormatException, IOException, SQLException{
@@ -117,23 +137,25 @@ public class ConsoleUI {
 		LoggedInCustomerHandler( stmt, id);
 	}
 	
-	static void CreateCustomerHandler( Statement stmt ) throws IOException{
-		String new_stock_no="";
+	static void CreateCustomerHandler( Statement stmt ) throws IOException, NumberFormatException, SQLException{
+		String customerID="";
 		while(true){
 			System.out.println("enter new customer number:\n");
-			new_stock_no = br.readLine();
-			if (new_stock_no.matches("[0-9][0-9][0-9][0-9][0-9]")){
+			customerID = br.readLine();
+			if (customerID.matches("[0-9][0-9][0-9][0-9][0-9]")){
 					break;
 			}
 			System.out.println("Sorry, invalid customer ID, try again");
 		}
        	System.out.println("enter new customer name:\n");
        	String new_name = br.readLine();
-       	EmartCustomers.insertEmartCustomer(Integer.parseInt(new_stock_no), new_name, stmt);
+       	EmartCustomers.insertEmartCustomer(Integer.parseInt(customerID), new_name, stmt);
+       	LoggedInCustomerHandler(stmt, Integer.parseInt(customerID));
        	return;	    
 	}
 	
 	static void ManagerHandler(Statement stmt) throws IOException, SQLException{
+		
 		System.out.println("press 1 to edit Emart catalog, press 0 to go back");
         String str = br.readLine();
         if(str.equals("1")){
@@ -147,8 +169,7 @@ public class ConsoleUI {
 	}
 	
 	static void ManagerEditCatalogHandler(Statement stmt) throws SQLException, IOException{
-		System.out.println("Current items in the catalog:");
-		EmartItems.printall(stmt);
+		EmartItems.printallformatted(stmt);
 		System.out.println("press 1 to add items, press 2 to remove items, press 3 to update items, press 0 to go back");
         String str = br.readLine();
 		 if(str.equals("1")){
@@ -169,13 +190,16 @@ public class ConsoleUI {
 		while(true){
 		System.out.println("Please enter the stock no of the item you would like to update:");
 		int stockno = Integer.parseInt(br.readLine());
+		String name = EmartItems.getItemName(stmt, stockno);
+		System.out.println("Selected "+name);
 		System.out.println("Press 1 to update price, press 2 to update quantity, press 0 to choose a new item");
 		String str = br.readLine();
 		 if(str.equals("1")){
-			 System.out.println("Please enter the new price:");
-			 
+			 System.out.println("Please enter the new price for "+name+":");
+			 int price = Integer.parseInt(br.readLine());
+			 EmartItems.updatePrice(stockno, price, stmt);
 		 }else if(str.equals("2")){
-			 System.out.println("Please enter the new quantity:");
+			 System.out.println("Please enter the new quantity for "+name+":");
 			 int quantity = Integer.parseInt(br.readLine());
 			 EmartItems.updateQuantity(stockno, quantity, stmt);
 		 }else if(str.equals("0")){

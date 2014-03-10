@@ -39,7 +39,8 @@ public class EmartItems {
 											   + "'" + quantity + "')";	
 		try{
 			stmt.executeUpdate(sql);
-			System.out.println(sql);
+			System.out.println("Inserted "+quantity+" "+name+" into Emart");
+			//System.out.println(sql);
 		}catch(SQLException se){
 	      //Handle errors for JDBC
 		  System.out.println(se);
@@ -54,6 +55,13 @@ public class EmartItems {
 		return name;		
 	}
 	
+	public static int getItemPrice( Statement stmt, int stockno ) throws SQLException{
+		ResultSet rs = stmt.executeQuery("SELECT price from EmartItems where stockno ="+stockno);
+		rs.next();
+		int price = rs.getInt("price");
+		return price;		
+	}
+	
 	//print all items
 	public static void printall( Statement stmt) throws SQLException{
 		ResultSet rs = stmt.executeQuery ("select * from EmartItems");
@@ -66,6 +74,22 @@ public class EmartItems {
 								   rs.getString("name")+")"+","+
 								   rs.getString("price")+")"+","+
 								   rs.getInt("quantity") 
+							);
+		}
+		rs.close();
+	}
+	
+	public static void printallformatted( Statement stmt) throws SQLException{
+		ResultSet rs = stmt.executeQuery ("select * from EmartItems");
+		   
+		// Iterate through the result and print the data
+		System.out.println("Contents of your Emart Catalog:");
+		while(rs.next()){
+			// Get the value from column "columnName" with integer type
+			System.out.println("Stock Number:"+rs.getInt("stockno")+
+							", Name:"+rs.getString("name").trim()+
+							", Price: "+rs.getString("price")+
+							", Quantity: "+rs.getInt("quantity") 
 							);
 		}
 		rs.close();
@@ -112,7 +136,8 @@ public class EmartItems {
 				 "Where "+ " stockno='"+stockno +"'";
 		try{
 			stmt.executeUpdate(sql);
-			System.out.println(sql);
+			//System.out.println(sql);
+			System.out.println("Updated quantity to "+quantity);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
@@ -127,7 +152,8 @@ public class EmartItems {
 				 "Where "+ " stockno='"+stockno +"'";
 		try{
 			stmt.executeUpdate(sql);
-			System.out.println(sql);
+			//System.out.println(sql);
+			System.out.println("Set price to "+price);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
@@ -139,7 +165,7 @@ public class EmartItems {
 		String sql = "DELETE FROM EmartItems WHERE stockno = "+stockno;
 		try{
 			stmt.executeUpdate(sql);
-			System.out.println("removed EmartItems "+stockno+" from the database");
+			System.out.println("removed item no. "+stockno+" from Emart");
 		}catch(SQLException se){
 	      //Handle errors for JDBC
 		  System.out.println(se);

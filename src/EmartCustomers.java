@@ -24,13 +24,14 @@ public class EmartCustomers {
 												   ") "+
 									"Values (" + "'" + customerID + "',"
 											   + "'" + name + "'," 
-											   + "'" + "new" + "',"
+											   + "'" + "New" + "',"
 											   + "'" + "0" + "',"
 											   + "'" + "0" + "',"
 											   + "'" + "0" + "')";	
 		try{
 			stmt.executeUpdate(sql);
-			System.out.println(sql);
+			//System.out.println(sql);
+			System.out.println("Added "+name.trim()+" as an Emart customer!");
 		}catch(SQLException se){
 	      //Handle errors for JDBC
 		  System.out.println(se);
@@ -77,7 +78,21 @@ public class EmartCustomers {
 		rs.close();
 	}
 	
-	
+	public static void printallformatted( Statement stmt) throws SQLException{
+		ResultSet rs = stmt.executeQuery ("select * from EmartCustomers");
+		   
+		// Iterate through the result and print the data
+		System.out.println("contents of EmartCustomers:");
+		while(rs.next()){
+			// Get the value from column "columnName" with integer type
+			System.out.println("Customer ID: "+rs.getInt("customerID")+
+								", Name: "+  rs.getString("name").trim()+
+								", Status: "+rs.getString("status")
+							);
+		}
+		rs.close();
+	}
+		
 	//remove by Customer ID
 	public static void removeByCustomerID(int customerID, Statement stmt){
 		String sql = "DELETE FROM EmartCustomers WHERE customerID = "+customerID;
@@ -90,8 +105,9 @@ public class EmartCustomers {
 	      se.printStackTrace();
 	   }
 	}
+	
 	//drop the EmartCustomers table
-		public static void dropEmartCustomer(Statement stmt){
+	public static void dropEmartCustomer(Statement stmt){
 			try{
 				stmt.executeUpdate("drop table EmartCustomers");
 				System.out.println("dropped EmartCustomers table");
@@ -101,6 +117,7 @@ public class EmartCustomers {
 			      se.printStackTrace();
 			}
 	}
+	
 	private static void updateOrderStatus(String sql, Statement stmt){
 		try{
 			ResultSet rs2 =  stmt.executeQuery(sql);
@@ -110,6 +127,7 @@ public class EmartCustomers {
 		      se.printStackTrace();
 		}
 	}
+	
 	public static void updateStatus(int customerID, String status, Statement stmt){
 		String sql = "Update EmartCustomers "+
 				 " SET status='" + status +"'"+
@@ -123,6 +141,7 @@ public class EmartCustomers {
 		      se.printStackTrace();
 		}
 	}
+	
 	private static String getStatusAndUpdate(int orders[]){
 		int orderTotals = orders[0]+orders[1]+orders[2];
 		if(orderTotals > 500)
@@ -134,6 +153,7 @@ public class EmartCustomers {
 		else
 			return "New";
 	}
+	
 	private static String orderStatusString(int customerID, int orders[], String newStatus){
 		String sql = "Update EmartCustomers "+
 				 "SET status='" + newStatus + "', " +
@@ -143,7 +163,8 @@ public class EmartCustomers {
 				 "Where "+ " customerID='"+customerID +"'";
 		return sql;
 	}
-	public static String getCustomerStatus(int customerID, Statement stmt){
+	
+public static String getCustomerStatus(int customerID, Statement stmt){
 		ResultSet rs1;
 		String status="";
 		String order1="SELECT C.status From  EmartCustomers C WHERE C.customerID =" + customerID; 
@@ -151,7 +172,7 @@ public class EmartCustomers {
 			rs1 = stmt.executeQuery(order1);
 			rs1.next();
 			status = rs1.getString("status");
-			System.out.println(status);
+			//System.out.println(status);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);

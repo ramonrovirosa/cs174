@@ -41,7 +41,15 @@ public class EmartPreviousOrders {
 		
 	}
 	//print all
-		public static void printall( Statement stmt) throws SQLException{
+	
+	public static int getNewOrderNo( Statement stmt ) throws SQLException{
+		ResultSet rs = stmt.executeQuery("SELECT max(orderno) as max from EmartPreviousOrders");
+		rs.next();
+		int max = rs.getInt("max");
+		return max+1;		
+	}
+	
+	public static void printall( Statement stmt) throws SQLException{
 			ResultSet rs = stmt.executeQuery ("select * from EmartPreviousOrders");
 
 			// Iterate through the result and print the data
@@ -65,6 +73,24 @@ public class EmartPreviousOrders {
 			}
 			rs.close();
 		}
+	
+	public static void printallcustomer( int customerID, Statement stmt) throws SQLException{
+		ResultSet rs = stmt.executeQuery ("select * from EmartPreviousOrders where customerID="+customerID);
+
+		// Iterate through the result and print the data
+		System.out.println("Your previous orders:");
+		while(rs.next()){
+			// Get the value from column "columnName" with integer type
+			System.out.println("Order Number: "+rs.getInt("orderno")+
+						", Stock Number: "+rs.getInt("itemID")+
+						", Item Name: "+EmartItems.getItemName(stmt,rs.getInt("itemID"))+
+						"Quantity: "+rs.getInt("quantity")+
+						"Price: "+rs.getInt("price")+
+						"Order Date: "+rs.getDate("orderDate")
+				);
+		}
+		rs.close();
+	}
 	//find previous orders by date
 	//Date format yyyy-mm-dd
 	public static void findPreviousOrdersByDate(String ordersBeforeDate, String ordersAfterDate,  Statement stmt)throws SQLException{

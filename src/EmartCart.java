@@ -1,9 +1,12 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class EmartCart {
+	public static final String DATE_FORMAT_NOW = "yyyy-MM-dd";
 	//create cart table
 	//itemid,name,customerid,quantity
 	static String create_table_sql = "CREATE TABLE EmartCart " +
@@ -48,6 +51,7 @@ public class EmartCart {
 	   }
 		
 	}
+	
 	private static void updateCart(int itemID, int quantity,int customerID, Statement stmt){
 		String sql = "Update EmartCart "+
 				 " SET quantity='" + quantity + "' "+
@@ -56,7 +60,8 @@ public class EmartCart {
 		try{
 //			System.out.println(sql);
 			stmt.executeUpdate(sql);
-			System.out.println(sql);
+			//System.out.println(sql);
+			System.out.println("Updated quantity of "+EmartItems.getItemName(stmt,itemID).trim()+" to "+quantity);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
@@ -77,7 +82,8 @@ public class EmartCart {
 			   + "'" + quantity + "')";	
 		try{
 			stmt.executeUpdate(sql);
-			System.out.println(sql);
+			System.out.println("Inserted "+quantity+" "+name.trim()+"(s) into cart");
+			//System.out.println(sql);
 		}catch(SQLException se){
 	      //Handle errors for JDBC
 		  System.out.println(se);
@@ -90,7 +96,19 @@ public class EmartCart {
 					 "AND customerID='"+customerID+"'";
 		try{
 			stmt.executeUpdate(sql);
-			System.out.println("removed EmartCart "+itemID+" from the cart");
+			System.out.println("Removed all"+EmartItems.getItemName(stmt,itemID).trim()+"(s) from "+EmartCustomers.getCustomerName(customerID,stmt).trim()+"'s cart");
+		}catch(SQLException se){
+	      //Handle errors for JDBC
+		  System.out.println(se);
+	      se.printStackTrace();
+	   }
+	}
+	
+	public static void deleteItemFromCartSilent(int itemID, int customerID, Statement stmt){
+		String sql = "DELETE FROM EmartCart WHERE itemID = "+itemID+
+					 "AND customerID='"+customerID+"'";
+		try{
+			stmt.executeUpdate(sql);
 		}catch(SQLException se){
 	      //Handle errors for JDBC
 		  System.out.println(se);
@@ -110,7 +128,11 @@ public class EmartCart {
 			rs1.next();
 			int prevQuantity = rs1.getInt("quantity");
 			quantity=prevQuantity-quantity;
-			updateCart(itemID,quantity, customerID, stmt);
+			if(quantity<0){
+				deleteItemFromCart(itemID,customerID,stmt);
+			}else{
+				updateCart(itemID,quantity, customerID, stmt);
+			}
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
@@ -179,7 +201,7 @@ public class EmartCart {
 			rs1 = stmt.executeQuery(getStatus);
 			rs1.next();
 			status = rs1.getString("status");
-			System.out.println("status: "+status);
+			//System.out.println("status: "+status);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
@@ -229,7 +251,23 @@ public class EmartCart {
 		Double disc = preTotal*discount*.01;
 		return preTotal - disc.intValue() + shipping;
 	}
-//	print all items in cart
+
+	public static void checkoutCart(int customerID, Statement stmt) throws SQLException{
+		int total = calculateGrantCartTotal(cartTotalWithoutTaxOrShipping(customerID,stmt), getStatusDiscount(customerID, stmt), getShippingPcnt(stmt));
+		System.out.println("The grand checkout total is: "+total);
+		ResultSet rs = stmt.executeQuery("Select itemID, quantity from EmartCart where customerID = "+customerID);
+		int orderno = EmartPreviousOrders.getNewOrderNo(stmt);
+		while(rs.next()){
+			int itemID = rs.getInt("itemID");
+			int quantity = rs.getInt("quantity");
+			System.out.println("calling instert prev order");
+			EmartPreviousOrders.insertPreviousOrder(orderno, customerID, itemID, quantity, now(), EmartItems.getItemPrice(stmt,itemID), stmt);
+			deleteItemFromCartSilent(itemID, customerID, stmt);
+		}
+	}
+	
+	
+	//	print all items in cart
 	public static void printall( Statement stmt) throws SQLException{
 		ResultSet rs = stmt.executeQuery ("select * from EmartCart");
 		   
@@ -245,18 +283,24 @@ public class EmartCart {
 		}
 		rs.close();
 	}
-	
+		
 	public static void printCustomerCart( Statement stmt, Integer id) throws SQLException{
 		ResultSet rs = stmt.executeQuery ("select * from EmartCart where customerID ="+id);
 		// Iterate through the result and print the data
 		while(rs.next()){
 			// Get the value from column "columnName" with integer type
-			System.out.println("("+rs.getInt("itemID")+","+
-								   rs.getString("name")+","+
-								   rs.getInt("quantity")+")" 
+			System.out.println("Stockno: "+rs.getInt("itemID")+
+								", Name: "+rs.getString("name").trim()+
+								", Quantity: "+rs.getInt("quantity")
 							);
 		}
 		rs.close();
 	}
 
+	public static String now() {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+		System.out.println(sdf.format(cal.getTime()));
+		return sdf.format(cal.getTime());
+		}
 }
