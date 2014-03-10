@@ -6,8 +6,8 @@ import java.sql.Statement;
 public class EmartPreviousOrders {
 	static String create_table_sql= "CREATE TABLE EmartPreviousOrders "+
 									" (orderno INTEGER not NULL, " +
-						            " customerID INTEGER not null, " + 
-						            " itemID INTEGER not null, " +
+						            " customerID CHAR(20) not null, " + 
+						            " itemID CHAR(20) not null, " +
 						            " quantity INTEGER, " +
 						            " orderDate DATE, " +
 						            " price INTEGER,"+
@@ -64,8 +64,8 @@ public class EmartPreviousOrders {
 			while(rs.next()){
 				// Get the value from column "columnName" with integer type
 				System.out.println(rs.getInt("orderno")+"      "+
-						   rs.getInt("customerID")+"          "+
-						   rs.getInt("itemID")+"      "+
+						   rs.getString("customerID")+"          "+
+						   rs.getString("itemID")+"      "+
 						   rs.getInt("quantity")+"       "+
 						   rs.getDate("orderDate")+"  "+
 						   rs.getInt("price") 
@@ -82,7 +82,7 @@ public class EmartPreviousOrders {
 		while(rs.next()){
 			// Get the value from column "columnName" with integer type
 			System.out.println("Order Number: "+rs.getInt("orderno")+
-						", Stock Number: "+rs.getInt("itemID")+
+						", Stock Number: "+rs.getString("itemID")+
 						", Item Name: "+EmartItems.getItemName(stmt,rs.getString("itemID"))+
 						"Quantity: "+rs.getInt("quantity")+
 						"Price: "+rs.getInt("price")+
@@ -117,8 +117,8 @@ public class EmartPreviousOrders {
 		while(rs.next()){
 			// Get the value from column "columnName" with integer type
 			System.out.println(rs.getInt("orderno")+"      "+
-					   rs.getInt("customerID")+"          "+
-					   rs.getInt("itemID")+"      "+
+					   rs.getString("customerID")+"          "+
+					   rs.getString("itemID")+"      "+
 					   rs.getInt("quantity")+"         "+
 					   rs.getDate("orderDate")+"  "+
 					   rs.getInt("price") 
@@ -129,8 +129,8 @@ public class EmartPreviousOrders {
 	
 	//delete item from previous orders
 	public static void deletePreviousOrders(int orderno, int itemID, Statement stmt){
-		String sql = "DELETE FROM EmartPreviousOrders WHERE itemID = "+itemID+
-				 "AND orderno='"+orderno+"'";
+		String sql = "DELETE FROM EmartPreviousOrders WHERE itemID = '"+itemID+
+				 "' AND orderno='"+orderno+"'";
 		try{
 			stmt.executeUpdate(sql);
 			System.out.println("removed EmartPreviousOrders from the database");

@@ -27,17 +27,25 @@ public class Main {
 		Statement stmt = conn.createStatement();
 		
 		//resetDB(stmt);
+		
 		ConsoleUI.initialPrompt(stmt);
 		conn.close();
 	}
 	
 	public static void resetDB(Statement stmt){
+		DiscAndShipPrcnt.dropDiscAndShipPrcnt(stmt);
+		EmartPreviousOrders.dropEmartPreviousOrders(stmt);
+		
 		EmartCart.dropEmartCart(stmt);
 		EmartCustomers.dropEmartCustomer(stmt);
 		EmartItems.dropEmartItems(stmt);
 		createTable(EmartCustomers.create_table_sql,stmt);
 		createTable(EmartItems.create_table_sql,stmt);
 		createTable(EmartCart.create_table_sql,stmt);
+		
+		createTable(EmartPreviousOrders.create_table_sql,stmt);
+		createTable(DiscAndShipPrcnt.create_table_sql,stmt);
+		DiscAndShipPrcnt.insertDefaults(stmt);
 
 
 	}

@@ -16,8 +16,7 @@ public class EmartCustomers {
             " Order2 INTEGER, " +
             " Order3 INTEGER, " +
             " PRIMARY KEY ( customerID ))";
-          
-	
+          	
 	public static void insertEmartCustomer(String customerID, String name, String password, String email, String address,int isManager, Statement stmt){
 		String sql = "INSERT INTO EmartCustomers ("+
 												   "customerID,"+

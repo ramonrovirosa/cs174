@@ -170,7 +170,7 @@ public class EmartCart {
 			while(rs1.next()){
 				total+=rs1.getInt("quantity")*rs1.getInt("price");
 			}
-			System.out.println("Cart total: $"+total);
+			//System.out.println("Cart total: $"+total);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
@@ -218,7 +218,7 @@ public class EmartCart {
 			rs = stmt.executeQuery(queryPcnt);
 			rs.next();
 			percent = rs.getInt("percentage");
-			System.out.println("shipping percentage: "+ percent);
+			//System.out.println("shipping percentage: "+ percent);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
@@ -236,7 +236,7 @@ public class EmartCart {
 			rs = stmt.executeQuery(queryPcnt);
 			rs.next();
 			percent = rs.getInt("percentage");
-			System.out.println("percentage: "+ percent);
+			//System.out.println("percentage: "+ percent);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
@@ -258,12 +258,13 @@ public class EmartCart {
 		ResultSet rs = stmt.executeQuery("Select itemID, quantity from EmartCart where customerID = '"+customerID+"'");
 		int orderno = EmartPreviousOrders.getNewOrderNo(stmt);
 		while(rs.next()){
-			String itemID = rs.getString("itemID");
-			int quantity = rs.getInt("quantity");
 			System.out.println("calling instert prev order");
+			String itemID = rs.getString("ITEMID");
+			int quantity = rs.getInt("quantity");
 			EmartPreviousOrders.insertPreviousOrder(orderno, customerID, itemID, quantity, now(), EmartItems.getItemPrice(stmt,itemID), stmt);
 			deleteItemFromCartSilent(itemID, customerID, stmt);
 		}
+		rs.close();
 	}
 	
 	
