@@ -11,7 +11,7 @@ public class ConsoleUI {
         if (str.equals("1")){
         	CustomerHandler(stmt);
         }else if (str.equals("2")){
-        	ManagerHandler(stmt);
+        	LoginManagerHandler(stmt);
         }else if (str.equals("3")){
         	return;
         }else if (str.equals("0")){
@@ -46,6 +46,27 @@ public class ConsoleUI {
         String name = EmartCustomers.getCustomerName(id,stmt);
         System.out.println("Welcome "+name.trim()+"!");
         LoggedInCustomerHandler( stmt, id );
+	}
+	
+	static void LoginManagerHandler( Statement stmt ) throws IOException, SQLException{
+	    System.out.println("Current Customers in our system:");
+	    EmartCustomers.printallformatted(stmt);
+	    while(true){
+	    	System.out.println("Please enter manager ID you wish to log in as, press 0 to cancel");
+	    	String id = br.readLine();
+	    	if(id.equals("0")){
+	    		initialPrompt(stmt);
+	    		break;
+	    	}
+	    	if(EmartCustomers.isManager(id, stmt)){
+		    	String name = EmartCustomers.getCustomerName(id,stmt);
+		    	System.out.println("Welcome "+name.trim()+"!");
+		    	ManagerHandler( stmt );
+		    	break;
+	    	}else{
+	    		System.out.println("This is not a manager accout no, try again");
+	    	}
+	    }
 	}
 	
 	static void LoggedInCustomerHandler( Statement stmt, String id ) throws IOException, SQLException{

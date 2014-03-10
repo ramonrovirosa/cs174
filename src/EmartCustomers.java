@@ -155,7 +155,6 @@ public class EmartCustomers {
 		}
 	}
 	
-
 	public static void updateStatus(String customerID, String status, Statement stmt){
 		String sql = "Update EmartCustomers "+
 				 " SET status='" + status +"'"+
@@ -192,7 +191,7 @@ public class EmartCustomers {
 		return sql;
 	}
 	
-public static String getCustomerStatus(String customerID, Statement stmt){
+	public static String getCustomerStatus(String customerID, Statement stmt){
 		ResultSet rs1;
 		String status="";
 		String order1="SELECT C.status From  EmartCustomers C WHERE C.customerID =" + customerID; 
@@ -223,6 +222,25 @@ public static String getCustomerStatus(String customerID, Statement stmt){
 		      se.printStackTrace();
 		}
 		return name;
+	}
+
+	public static boolean isManager(String customerID, Statement stmt){
+		ResultSet rs1;
+		String isManagerString="";
+		String order1="SELECT C.isManager From  EmartCustomers C WHERE C.customerID =" + customerID; 
+		try{
+			rs1 = stmt.executeQuery(order1);
+			rs1.next();
+			isManagerString = rs1.getString("isManager");
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+			  System.out.println(se);
+		      se.printStackTrace();
+		}
+		if(isManagerString.equals("1"))
+			return true;
+		else
+			return false;
 	}
 }
 
