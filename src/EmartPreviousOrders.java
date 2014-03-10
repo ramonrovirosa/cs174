@@ -1,6 +1,7 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
 public class EmartPreviousOrders {
@@ -142,8 +143,28 @@ public class EmartPreviousOrders {
 	}
 	
 	//run previous order by order#
-	public static void rerunPreviousOrder(int orderno, Statement stmt){
+	public static void rerunPreviousOrder(int orderno, Statement stmt)throws SQLException{
+		String query = "SELECT itemID, quantity, customerID FROM EmartPreviousOrders WHERE orderno='"+orderno+"'";
+		ResultSet rs = stmt.executeQuery (query);
 		
+		ArrayList<previousOrderVariables> rerunOrder = new ArrayList<previousOrderVariables>();
+		String customerID="0";
+		while(rs.next()){
+			// Get the value from column "columnName" with integer type
+				int quantity = rs.getInt("quantity");
+				String itemID = rs.getString("itemID").replaceAll("\\s","");
+				customerID = rs.getString("customerID").replaceAll("\\s","");
+				previousOrderVariables item = new previousOrderVariables(quantity,itemID,customerID);
+				rerunOrder.add(item);	
+		}
+		for(int i=0;i<rerunOrder.size();i++){
+			EmartCart.insertItemInCart( rerunOrder.get(i).getItemID(),rerunOrder.get(i).getCustomerID(),"ramon",rerunOrder.get(i).getQuantity(),stmt);
+		}
+		for(int i=0;i<rerunOrder.size();i++){
+			EmartCart.decrementQuantity( rerunOrder.get(i).getItemID(),rerunOrder.get(i).getCustomerID(),rerunOrder.get(i).getQuantity(),stmt);
+		}
+//		EmartCart.checkoutCart(customerID,stmt);
+		rs.close();
 	}
 	
 	
@@ -157,5 +178,25 @@ public class EmartPreviousOrders {
 		      se.printStackTrace();
 		}
 		
+	}
+}
+
+class previousOrderVariables{
+	int quantity;
+	String itemID;
+	String customerID;
+	public previousOrderVariables(int q, String i, String c){
+		quantity=q;
+		itemID=i;
+		customerID=c;
+	}
+	public int getQuantity(){
+		return quantity;
+	}
+	public String getItemID(){
+		return itemID;
+	}
+	public String getCustomerID(){
+		return customerID;
 	}
 }
