@@ -83,7 +83,7 @@ public class EmartPreviousOrders {
 			// Get the value from column "columnName" with integer type
 			System.out.println("Order Number: "+rs.getInt("orderno")+
 						", Stock Number: "+rs.getString("itemID")+
-						", Item Name: "+EmartItems.getItemName(stmt,rs.getString("itemID"))+
+						", Customer ID: "+rs.getString("customerID")+
 						"Quantity: "+rs.getInt("quantity")+
 						"Price: "+rs.getInt("price")+
 						"Order Date: "+rs.getDate("orderDate")

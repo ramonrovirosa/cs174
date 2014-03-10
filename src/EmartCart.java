@@ -256,16 +256,16 @@ public class EmartCart {
 		int total = calculateGrantCartTotal(cartTotalWithoutTaxOrShipping(customerID,stmt), getStatusDiscount(customerID, stmt), getShippingPcnt(stmt));
 		System.out.println("The grand checkout total is: "+total);
 		int orderno = EmartPreviousOrders.getNewOrderNo(stmt);
-		ResultSet rs = stmt.executeQuery("Select itemID, quantity from EmartCart where customerID = '"+customerID+"'");
-		while(rs.next()){
+		ResultSet rs1 = stmt.executeQuery("Select itemID, quantity from EmartCart where customerID = '"+customerID+"'");
+		while(rs1.next()){
 			System.out.println("calling instert prev order");
-			String itemID = rs.getString("ITEMID");
-			int quantity = rs.getInt("quantity");
+			String itemID = rs1.getString("ITEMID");
+			int quantity = rs1.getInt("quantity");
 			EmartPreviousOrders.insertPreviousOrder(orderno, customerID, itemID, quantity, now(), EmartItems.getItemPrice(stmt,itemID), stmt);
 			System.out.println("inserted into prev order");
 			deleteItemFromCartSilent(itemID, customerID, stmt);
 		}
-		rs.close();
+		rs1.close();
 		return;
 	}
 	

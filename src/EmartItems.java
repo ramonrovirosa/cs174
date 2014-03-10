@@ -87,11 +87,11 @@ public class EmartItems {
 	}
 	
 	public static int getItemPrice( Statement stmt, String stockno ) throws SQLException{
-		ResultSet rs = stmt.executeQuery("SELECT price from EmartItems where stockno ='"+stockno+"'");
-		rs.next();
-		int price = rs.getInt("price");
+		ResultSet rs3 = stmt.executeQuery("SELECT price from EmartItems where stockno ='"+stockno+"'");
+		rs3.next();
+		int price = rs3.getInt("price");
 		System.out.println("in get price;");
-		rs.close();
+		rs3.close();
 		return price;		
 	}
 	
