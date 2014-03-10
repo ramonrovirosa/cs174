@@ -90,7 +90,6 @@ public class EmartItems {
 		ResultSet rs3 = stmt.executeQuery("SELECT price from EmartItems where stockno ='"+stockno+"'");
 		rs3.next();
 		int price = rs3.getInt("price");
-		System.out.println("in get price;");
 		rs3.close();
 		return price;		
 	}

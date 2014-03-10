@@ -15,7 +15,7 @@ public class ConsoleUI {
         }else if (str.equals("3")){
         	return;
         }else if (str.equals("0")){
-        	return;
+        	System.exit(0);
         }else{
         	System.out.println("Could not read input...");
         	initialPrompt(stmt);
@@ -70,7 +70,7 @@ public class ConsoleUI {
 	}
 	
 	static void LoggedInCustomerHandler( Statement stmt, String id ) throws IOException, SQLException{
-		System.out.println("press 1 to view cart, press 2 to edit cart contents, press 3 to view previous orders, "
+		System.out.println("press 1 to view cart, press 2 to edit cart contents, press 3 to view/rerun previous orders, "
 				+ "\npress 4 to view your status, press 5 to checkout, press 0 to logout");
         String str = br.readLine();
         if(str.equals("1")){
@@ -79,7 +79,14 @@ public class ConsoleUI {
         	CustomerEditCart(stmt, id);
         }else if(str.equals("3")){
         	EmartPreviousOrders.printallcustomer(id,stmt);
-        	LoggedInCustomerHandler(stmt,id);
+        	System.out.println("To rerun a previous order, enter the order no. Enter 0 to go back.");
+            String str1 = br.readLine();
+            if( str1.equals("0")){
+        		LoggedInCustomerHandler(stmt,id);
+            }else{
+            	EmartPreviousOrders.rerunPreviousOrder(Integer.parseInt(str1),stmt);
+            	LoggedInCustomerHandler(stmt,id);
+            }
         }else if(str.equals("4")){
         	System.out.println("Your current customer status is: "+EmartCustomers.getCustomerStatus(id, stmt).trim());
         	LoggedInCustomerHandler(stmt,id);

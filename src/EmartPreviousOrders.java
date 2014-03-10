@@ -33,7 +33,7 @@ public class EmartPreviousOrders {
 							   + "'" + price + "')";	
 		try{
 			stmt.executeUpdate(sql);
-			System.out.println(sql);
+			//System.out.println(sql);
 		}catch(SQLException se){
 	      //Handle errors for JDBC
 		  System.out.println(se);
@@ -83,11 +83,11 @@ public class EmartPreviousOrders {
 		while(rs.next()){
 			// Get the value from column "columnName" with integer type
 			System.out.println("Order Number: "+rs.getInt("orderno")+
-						", Stock Number: "+rs.getString("itemID")+
-						", Customer ID: "+rs.getString("customerID")+
-						"Quantity: "+rs.getInt("quantity")+
-						"Price: "+rs.getInt("price")+
-						"Order Date: "+rs.getDate("orderDate")
+						", Stock Number: "+rs.getString("itemID").trim()+
+						", Customer ID: "+rs.getString("customerID").trim()+
+						", Quantity: "+rs.getInt("quantity")+
+						", Price: $"+rs.getInt("price")+
+						", Order Date: "+rs.getDate("orderDate")
 				);
 		}
 		rs.close();
@@ -158,12 +158,13 @@ public class EmartPreviousOrders {
 				rerunOrder.add(item);	
 		}
 		for(int i=0;i<rerunOrder.size();i++){
-			EmartCart.insertItemInCart( rerunOrder.get(i).getItemID(),rerunOrder.get(i).getCustomerID(),"ramon",rerunOrder.get(i).getQuantity(),stmt);
+			EmartCart.insertItemInCart( rerunOrder.get(i).getItemID(),rerunOrder.get(i).getCustomerID(),EmartItems.getItemName(stmt, rerunOrder.get(i).getItemID()),rerunOrder.get(i).getQuantity(),stmt);
 		}
+		EmartCart.checkoutCart(customerID,stmt);
+		/*
 		for(int i=0;i<rerunOrder.size();i++){
 			EmartCart.decrementQuantity( rerunOrder.get(i).getItemID(),rerunOrder.get(i).getCustomerID(),rerunOrder.get(i).getQuantity(),stmt);
-		}
-//		EmartCart.checkoutCart(customerID,stmt);
+		}*/
 		rs.close();
 	}
 	

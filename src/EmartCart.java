@@ -2,6 +2,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -254,18 +255,21 @@ public class EmartCart {
 
 	public static void checkoutCart(String customerID, Statement stmt) throws SQLException{
 		int total = calculateGrantCartTotal(cartTotalWithoutTaxOrShipping(customerID,stmt), getStatusDiscount(customerID, stmt), getShippingPcnt(stmt));
-		System.out.println("The grand checkout total is: "+total);
+		System.out.println("The grand checkout total is: $"+total);
 		int orderno = EmartPreviousOrders.getNewOrderNo(stmt);
+		ArrayList<cartItemInfo> cartItems = new ArrayList<cartItemInfo>();
 		ResultSet rs1 = stmt.executeQuery("Select itemID, quantity from EmartCart where customerID = '"+customerID+"'");
 		while(rs1.next()){
-			System.out.println("calling instert prev order");
 			String itemID = rs1.getString("ITEMID");
 			int quantity = rs1.getInt("quantity");
-			EmartPreviousOrders.insertPreviousOrder(orderno, customerID, itemID, quantity, now(), EmartItems.getItemPrice(stmt,itemID), stmt);
-			System.out.println("inserted into prev order");
-			deleteItemFromCartSilent(itemID, customerID, stmt);
-		}
+			cartItemInfo item = new cartItemInfo(quantity,itemID);
+			cartItems.add(item);
+		}	
 		rs1.close();
+		for(int i=0;i<cartItems.size();i++){
+			EmartPreviousOrders.insertPreviousOrder(orderno, customerID, cartItems.get(i).getItemID(), cartItems.get(i).getQuantity(), now(), EmartItems.getItemPrice(stmt,cartItems.get(i).getItemID()), stmt);
+			deleteItemFromCartSilent(cartItems.get(i).getItemID(), customerID, stmt);
+		}		
 		return;
 	}
 	
@@ -303,7 +307,21 @@ public class EmartCart {
 	public static String now() {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
-		System.out.println(sdf.format(cal.getTime()));
 		return sdf.format(cal.getTime());
 		}
+}
+
+class cartItemInfo{
+	String itemID;
+	int quantity;
+	public cartItemInfo(int q, String i){
+	 		quantity=q;
+			itemID=i;
+	}
+	public int getQuantity(){
+		return quantity;
+	}
+	public String getItemID(){
+		return itemID;
+	}
 }

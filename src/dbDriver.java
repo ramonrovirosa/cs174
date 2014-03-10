@@ -16,10 +16,5 @@ public class dbDriver {
 ///////////////////////////////////////////////////
 //test test alex simes
 // 2. Test functions for each query
-print_all();
-
 }
-
-public static void print_all() throws SQLException
-{}
 }

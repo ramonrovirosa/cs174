@@ -5,8 +5,8 @@ import java.sql.*;
 public class Main {
 	static Connection conn;
 	static String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
-	static String strUsername = "ramonrovirosa";
-	static String strPassword = "4935854";
+	static String strUsername = "alexander_simes";
+	static String strPassword = "4998837";
 	public static void main(String[] args) throws SQLException, IOException {
 		// 1. Load the Oracle JDBC driver for this program
 		try {
@@ -27,8 +27,10 @@ public class Main {
 		Statement stmt = conn.createStatement();
 		
 //		resetDB(stmt);
-		
-//		ConsoleUI.initialPrompt(stmt);
+		//EmartPreviousOrders.dropEmartPreviousOrders(stmt);
+		//createTable(EmartPreviousOrders.create_table_sql,stmt);
+
+		ConsoleUI.initialPrompt(stmt);
 		conn.close();
 	}
 	
