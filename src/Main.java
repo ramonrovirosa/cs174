@@ -29,7 +29,7 @@ public class Main {
 		//create EdepotItems table
 //		EdepotItems.dropEdepotItem(stmt);
 //		createTable(EdepotItems.create_table_sql, stmt);
-//		EdepotItems.insertEdepotItem(1,"firstitem", stmt);
+//		EdepotItems.insertEdepotItem(stockno, name, stmt)
 //		EdepotItems.insertEdepotItem(2,"seconditem", stmt);
 //		EdepotItems.printall(stmt);
 //		EdepotItems.getNamebyStockNO(2, stmt);
@@ -39,18 +39,34 @@ public class Main {
 		
 //		EmartCustomers.dropEmartCustomer(stmt);
 //		createTable(EmartCustomers.create_table_sql,stmt);
-//		EmartCustomers.insertEmartCustomer(200, "Brenda", stmt);
-//		EmartCustomers.insertEmartCustomer(10, "Ramon", stmt);
-//		EmartCustomers.insertEmartCustomer(50, "Alex", stmt);
+//		EmartCustomers.insertEmartCustomer("Rhagrid", "Rubeus Hagrid", "Rhagrid", "rhagrid@cs","123 MyStreet, Goleta apt A, Ca", 0, stmt);
+//		EmartCustomers.insertEmartCustomer("Mhooch", "Madam Hooch", "Mhooch", "mhooch@cs","123 MyStreet, Goleta apt B, Ca", 0, stmt);
+//		EmartCustomers.insertEmartCustomer("Amoody", "Alastor Moody", "Amoody", "amoody@cs","123 MyStreet, Goleta apt C, Ca", 0, stmt);
+//		EmartCustomers.insertEmartCustomer("Pquirrell", "Professor Quirrell", "Pquirrell", "pquirrell@cs","123 MyStreet, Goleta apt D, Ca", 0, stmt);
+//		EmartCustomers.insertEmartCustomer("Sblack", "Alastor Moody", "Sblack", "sblack@cs","123 MyStreet, Goleta apt E, Ca", 1, stmt);
+//		EmartCustomers.insertEmartCustomer("Ddiggle", "Dedalus Diggle", "Ddiggle", "ddiggle@cs","123 MyStreet, Goleta apt F, Ca", 0, stmt);
 //		EmartCustomers.removeByCustomerID(10, stmt);
 //		EmartCustomers.printall(stmt);
-//		EmartCustomers.updateStatus(10, "Gold", stmt);
+//		EmartCustomers.updateStatus("Rhagrid", "Gold", stmt);
+//		EmartCustomers.updateStatus("Mhooch", "Silver", stmt);
+//		EmartCustomers.updateStatus("Sblack", "Green", stmt);
+//		EmartCustomers.updateStatus("Ddiggle","Green", stmt);
 //		EmartCustomers.printall(stmt);
 //		EmartCustomers.customerStatus(10,stmt);
 
 //		EmartItems.dropEmartItems(stmt);
 //		createTable(EmartItems.create_table_sql,stmt);
-
+//		EmartItems.insertEmartItem("101", "Laptop", "HP", "6111", "Processer speed: 3.33Ghz, Ram size: 512 Mb, Hard disk size: 100Gb, Display Size: 17\"", 12, 1630, 1, 2, 10, "A9", stmt);
+//		EmartItems.printall(stmt);
+//		EmartItems.searchEmartItem("101", stmt);
+//		EmartItems.updateItemQuantityAdd("101", 5, stmt);
+//		EmartItems.printall(stmt);
+//		EmartItems.updateItemQuantitySubtract("101", 5, stmt);
+//		EmartItems.printall(stmt);
+//		EmartItems.updateQuantity("101", 4, stmt);
+		EmartItems.updatePrice("101", 1630, stmt);
+		EmartItems.printall(stmt);
+		
 //		EmartCart.getStatusDiscount(10,stmt);
 //		int a =EmartCart.calculateGrantCartTotal(EmartCart.cartTotalWithoutTaxOrShipping(stmt), EmartCart.getStatusDiscount(stmt), EmartCart.getShippingPcnt(stmt));
 //		System.out.println("Grand Total: "+ a);
@@ -61,9 +77,9 @@ public class Main {
 //		EmartAccessories.insertAccessory(10, 20, stmt);
 //		EmartAccessories.deleteAccessory(10, 30, stmt);
 		//EmartAccessories.printAccessory(10,stmt);
-		ConsoleUI.initialPrompt(stmt);
+//		ConsoleUI.initialPrompt(stmt);
 		
-
+//		EmartItems.dropEmartItems(stmt);
 		
 //		System.out.println(EmartPreviousOrders.create_table_sql);
 //		createTable(EmartPreviousOrders.create_table_sql,stmt);
@@ -72,16 +88,16 @@ public class Main {
 //		EmartPreviousOrders.printall(stmt);
 //		EmartPreviousOrders.findPreviousOrdersByDate("2015-01-12", "2010-01-12",stmt);
 //		EmartPreviousOrders.deletePreviousOrders(101, 20, stmt);
+		
+//		resetDB(stmt);
+		
 		conn.close();
 	}
 	
 	public static void resetDB(Statement stmt){
 		EmartCart.dropEmartCart(stmt);
-		EdepotItems.dropEdepotItem(stmt);
+		EmartPreviousOrders.dropEmartPreviousOrders(stmt);
 		EmartCustomers.dropEmartCustomer(stmt);
-		createTable(EdepotItems.create_table_sql, stmt);
-		createTable(EmartCustomers.create_table_sql,stmt);	
-		createTable(EmartCart.create_table_sql,stmt);
 	}
 	
 	public static void createTable(String sql, Statement stmt){
@@ -93,6 +109,7 @@ public class Main {
 		  System.out.println(se);
 	      se.printStackTrace();
 	   }
-	}
-	
+	}     
 }
+
+
