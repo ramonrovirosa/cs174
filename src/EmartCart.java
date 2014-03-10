@@ -105,8 +105,8 @@ public class EmartCart {
 	}
 	
 	public static void deleteItemFromCartSilent(String itemID, String customerID, Statement stmt){
-		String sql = "DELETE FROM EmartCart WHERE itemID = "+itemID+
-					 "AND customerID='"+customerID+"'";
+		String sql = "DELETE FROM EmartCart WHERE itemID = '"+itemID+
+					 "' AND customerID='"+customerID+"'";
 		try{
 			stmt.executeUpdate(sql);
 		}catch(SQLException se){
@@ -255,16 +255,18 @@ public class EmartCart {
 	public static void checkoutCart(String customerID, Statement stmt) throws SQLException{
 		int total = calculateGrantCartTotal(cartTotalWithoutTaxOrShipping(customerID,stmt), getStatusDiscount(customerID, stmt), getShippingPcnt(stmt));
 		System.out.println("The grand checkout total is: "+total);
-		ResultSet rs = stmt.executeQuery("Select itemID, quantity from EmartCart where customerID = '"+customerID+"'");
 		int orderno = EmartPreviousOrders.getNewOrderNo(stmt);
+		ResultSet rs = stmt.executeQuery("Select itemID, quantity from EmartCart where customerID = '"+customerID+"'");
 		while(rs.next()){
 			System.out.println("calling instert prev order");
 			String itemID = rs.getString("ITEMID");
 			int quantity = rs.getInt("quantity");
 			EmartPreviousOrders.insertPreviousOrder(orderno, customerID, itemID, quantity, now(), EmartItems.getItemPrice(stmt,itemID), stmt);
+			System.out.println("inserted into prev order");
 			deleteItemFromCartSilent(itemID, customerID, stmt);
 		}
 		rs.close();
+		return;
 	}
 	
 	

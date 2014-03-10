@@ -82,6 +82,7 @@ public class EmartItems {
 		ResultSet rs = stmt.executeQuery("SELECT category from EmartItems where stockno ='"+stockno+"'");
 		rs.next();
 		String name = rs.getString("category").replaceAll("\\s+","");
+		rs.close();
 		return name;		
 	}
 	
@@ -89,6 +90,8 @@ public class EmartItems {
 		ResultSet rs = stmt.executeQuery("SELECT price from EmartItems where stockno ='"+stockno+"'");
 		rs.next();
 		int price = rs.getInt("price");
+		System.out.println("in get price;");
+		rs.close();
 		return price;		
 	}
 	
