@@ -15,7 +15,7 @@ public class EmartPreviousOrders {
 						            " FOREIGN KEY (itemID) REFERENCES EmartItems (stockno)," +
 						            " FOREIGN KEY (customerID) REFERENCES EmartCustomers (customerID) )";
 			
-	public static void insertPreviousOrder(int orderno, int customerID, int itemID, int quantity, String orderDate, int price, Statement stmt){
+	public static void insertPreviousOrder(int orderno, String customerID, String itemID, int quantity, String orderDate, int price, Statement stmt){
 		String sql = "INSERT INTO EmartPreviousOrders ("+
 					 " orderno,"+
 					 " customerID,"+
@@ -74,7 +74,7 @@ public class EmartPreviousOrders {
 			rs.close();
 		}
 	
-	public static void printallcustomer( int customerID, Statement stmt) throws SQLException{
+	public static void printallcustomer( String customerID, Statement stmt) throws SQLException{
 		ResultSet rs = stmt.executeQuery ("select * from EmartPreviousOrders where customerID="+customerID);
 
 		// Iterate through the result and print the data
@@ -83,7 +83,7 @@ public class EmartPreviousOrders {
 			// Get the value from column "columnName" with integer type
 			System.out.println("Order Number: "+rs.getInt("orderno")+
 						", Stock Number: "+rs.getInt("itemID")+
-						", Item Name: "+EmartItems.getItemName(stmt,rs.getInt("itemID"))+
+						", Item Name: "+EmartItems.getItemName(stmt,rs.getString("itemID"))+
 						"Quantity: "+rs.getInt("quantity")+
 						"Price: "+rs.getInt("price")+
 						"Order Date: "+rs.getDate("orderDate")

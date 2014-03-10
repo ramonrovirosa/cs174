@@ -9,6 +9,14 @@ connect ramonrovirosa/4935854@uml.cs.ucsb.edu:1521/xexdb
 //Customer ID
 unique string
 
+//      EmartCustomers.insertEmartCustomer("Rhagrid", "Rubeus Hagrid", "Rhagrid", "rhagrid@cs","123 MyStreet, Goleta apt A, Ca", 0, stmt);
+//		EmartCustomers.insertEmartCustomer("Mhooch", "Madam Hooch", "Mhooch", "mhooch@cs","123 MyStreet, Goleta apt B, Ca", 0, stmt);
+//		EmartCustomers.insertEmartCustomer("Amoody", "Alastor Moody", "Amoody", "amoody@cs","123 MyStreet, Goleta apt C, Ca", 0, stmt);
+//		EmartCustomers.insertEmartCustomer("Pquirrell", "Professor Quirrell", "Pquirrell", "pquirrell@cs","123 MyStreet, Goleta apt D, Ca", 0, stmt);
+//		EmartCustomers.insertEmartCustomer("Sblack", "Alastor Moody", "Sblack", "sblack@cs","123 MyStreet, Goleta apt E, Ca", 1, stmt);
+//		EmartCustomers.insertEmartCustomer("Ddiggle", "Dedalus Diggle", "Ddiggle", "ddiggle@cs","123 MyStreet, Goleta apt F, Ca", 0, stmt);
+		
+
 //StockNumber
 XXnnnnn
 XX two letter A-Z combo (upercase only)

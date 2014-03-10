@@ -10,8 +10,8 @@ public class EmartCart {
 	//create cart table
 	//itemid,name,customerid,quantity
 	static String create_table_sql = "CREATE TABLE EmartCart " +
-            "(itemID INTEGER, " + 
-            " customerID INTEGER, " +
+            "(itemID CHAR(20), " + 
+            " customerID CHAR(20), " +
             " name CHAR(20), " +
             " quantity INTEGER, " +
             " PRIMARY KEY ( customerID, itemID ),"+
@@ -20,7 +20,7 @@ public class EmartCart {
 	
 	
 	//Add items to the cart
-	public static void insertItemInCart( int itemID, int customerID, String name, int quantity, Statement stmt ){
+	public static void insertItemInCart( String itemID, String customerID, String name, int quantity, Statement stmt ){
 		//first check if item is already in cart...and if it is do an update else do insert
 		//first check if item is in cart
 		ResultSet rs1;
@@ -52,7 +52,7 @@ public class EmartCart {
 		
 	}
 	
-	private static void updateCart(int itemID, int quantity,int customerID, Statement stmt){
+	private static void updateCart(String itemID, int quantity,String customerID, Statement stmt){
 		String sql = "Update EmartCart "+
 				 " SET quantity='" + quantity + "' "+
 				 " Where "+ " itemID='"+itemID +"'" +
@@ -69,7 +69,7 @@ public class EmartCart {
 		}
 	}
 	
-	private static void executeInsertQuery( int itemID, int customerID, String name, int quantity, Statement stmt){
+	private static void executeInsertQuery( String itemID, String customerID, String name, int quantity, Statement stmt){
 		String sql = "INSERT INTO EmartCart ("+
 				   "itemID,"+
 				   "customerID,"+
@@ -91,7 +91,7 @@ public class EmartCart {
 	   }
 	}
 	//Delete Items from the cart
-	public static void deleteItemFromCart(int itemID, int customerID, Statement stmt){
+	public static void deleteItemFromCart(String itemID, String customerID, Statement stmt){
 		String sql = "DELETE FROM EmartCart WHERE itemID = "+itemID+
 					 "AND customerID='"+customerID+"'";
 		try{
@@ -104,7 +104,7 @@ public class EmartCart {
 	   }
 	}
 	
-	public static void deleteItemFromCartSilent(int itemID, int customerID, Statement stmt){
+	public static void deleteItemFromCartSilent(String itemID, String customerID, Statement stmt){
 		String sql = "DELETE FROM EmartCart WHERE itemID = "+itemID+
 					 "AND customerID='"+customerID+"'";
 		try{
@@ -116,7 +116,7 @@ public class EmartCart {
 	   }
 	}
 	//remove a quantity of an item from the cart
-	public static void decrementQuantity(int itemID, int customerID, int quantity,  Statement stmt){
+	public static void decrementQuantity(String itemID, String customerID, int quantity,  Statement stmt){
 		ResultSet rs1;
 		String queryItems = "SELECT C.quantity " +
 							" From EmartCart C "+
@@ -156,7 +156,7 @@ public class EmartCart {
 	//gold customer 10% off order
 	//silver 5% off order
 	//10% shipping & handling fee if total less than or equal $100
-	public static int cartTotalWithoutTaxOrShipping(int customerID, Statement stmt){
+	public static int cartTotalWithoutTaxOrShipping(String customerID, Statement stmt){
 		ResultSet rs1;
 		String query = "SELECT C.quantity, A.price "+
 					   " FROM EmartCart C, EmartItems A "+
@@ -180,7 +180,7 @@ public class EmartCart {
 	}
 	
 	//getCustomerStatus
-	public static String customerStatus(int customerID, Statement stmt){
+	public static String customerStatus(String customerID, Statement stmt){
 		ResultSet rs,rs1;
 		String status="";
 //		int customerID = 0;
@@ -196,7 +196,7 @@ public class EmartCart {
 //		      se.printStackTrace();
 //		}
 		//now get status based on customer id
-		String getStatus="SELECT C.status From  EmartCustomers C WHERE C.customerID =" + customerID; 
+		String getStatus="SELECT C.status From  EmartCustomers C WHERE C.customerID ='" + customerID+"'"; 
 		try{
 			rs1 = stmt.executeQuery(getStatus);
 			rs1.next();
@@ -227,7 +227,7 @@ public class EmartCart {
 		return percent;
 	}
 	//status discount
-	public static int getStatusDiscount(int customerID, Statement stmt){
+	public static int getStatusDiscount(String customerID, Statement stmt){
 		ResultSet rs,rs1;
 		String status=customerStatus(customerID, stmt);
 		int percent = 0;
@@ -252,13 +252,13 @@ public class EmartCart {
 		return preTotal - disc.intValue() + shipping;
 	}
 
-	public static void checkoutCart(int customerID, Statement stmt) throws SQLException{
+	public static void checkoutCart(String customerID, Statement stmt) throws SQLException{
 		int total = calculateGrantCartTotal(cartTotalWithoutTaxOrShipping(customerID,stmt), getStatusDiscount(customerID, stmt), getShippingPcnt(stmt));
 		System.out.println("The grand checkout total is: "+total);
-		ResultSet rs = stmt.executeQuery("Select itemID, quantity from EmartCart where customerID = "+customerID);
+		ResultSet rs = stmt.executeQuery("Select itemID, quantity from EmartCart where customerID = '"+customerID+"'");
 		int orderno = EmartPreviousOrders.getNewOrderNo(stmt);
 		while(rs.next()){
-			int itemID = rs.getInt("itemID");
+			String itemID = rs.getString("itemID");
 			int quantity = rs.getInt("quantity");
 			System.out.println("calling instert prev order");
 			EmartPreviousOrders.insertPreviousOrder(orderno, customerID, itemID, quantity, now(), EmartItems.getItemPrice(stmt,itemID), stmt);
@@ -275,8 +275,8 @@ public class EmartCart {
 		System.out.println("contents of EmartCart:");
 		while(rs.next()){
 			// Get the value from column "columnName" with integer type
-			System.out.println("("+rs.getInt("itemID")+","+
-								   rs.getInt("customerID")+","+
+			System.out.println("("+rs.getString("itemID")+","+
+								   rs.getString("customerID")+","+
 								   rs.getString("name")+","+
 								   rs.getInt("quantity")+")" 
 							);
@@ -284,12 +284,12 @@ public class EmartCart {
 		rs.close();
 	}
 		
-	public static void printCustomerCart( Statement stmt, Integer id) throws SQLException{
-		ResultSet rs = stmt.executeQuery ("select * from EmartCart where customerID ="+id);
+	public static void printCustomerCart( Statement stmt, String id) throws SQLException{
+		ResultSet rs = stmt.executeQuery ("select * from EmartCart where customerID ='"+id+"'");
 		// Iterate through the result and print the data
 		while(rs.next()){
 			// Get the value from column "columnName" with integer type
-			System.out.println("Stockno: "+rs.getInt("itemID")+
+			System.out.println("Stockno: "+rs.getString("itemID").trim()+
 								", Name: "+rs.getString("name").trim()+
 								", Quantity: "+rs.getInt("quantity")
 							);

@@ -25,65 +25,21 @@ public class Main {
 
 		// Create a Statement
 		Statement stmt = conn.createStatement();
-
-		//create EdepotItems table
-//		EdepotItems.dropEdepotItem(stmt);
-//		createTable(EdepotItems.create_table_sql, stmt);
-//		EdepotItems.insertEdepotItem(1,"firstitem", stmt);
-//		EdepotItems.insertEdepotItem(2,"seconditem", stmt);
-//		EdepotItems.printall(stmt);
-//		EdepotItems.getNamebyStockNO(2, stmt);
-//		EdepotItems.getNamebyStockNO(1, stmt);
-//		EdepotItems.removebystockno(2,stmt);
-//		EdepotItems.printall(stmt);
 		
-//		EmartCustomers.dropEmartCustomer(stmt);
-//		createTable(EmartCustomers.create_table_sql,stmt);
-//		EmartCustomers.insertEmartCustomer(200, "Brenda", stmt);
-//		EmartCustomers.insertEmartCustomer(10, "Ramon", stmt);
-//		EmartCustomers.insertEmartCustomer(50, "Alex", stmt);
-//		EmartCustomers.removeByCustomerID(10, stmt);
-//		EmartCustomers.printall(stmt);
-//		EmartCustomers.updateStatus(10, "Gold", stmt);
-//		EmartCustomers.printall(stmt);
-//		EmartCustomers.customerStatus(10,stmt);
-
-//		EmartItems.dropEmartItems(stmt);
-//		createTable(EmartItems.create_table_sql,stmt);
-
-//		EmartCart.getStatusDiscount(10,stmt);
-//		int a =EmartCart.calculateGrantCartTotal(EmartCart.cartTotalWithoutTaxOrShipping(stmt), EmartCart.getStatusDiscount(stmt), EmartCart.getShippingPcnt(stmt));
-//		System.out.println("Grand Total: "+ a);
-//		EmartCart.dropEmartCart(stmt);
-		
-		//System.out.println(EmartAccessories.create_table_sql);
-//		createTable(EmartAccessories.create_table_sql, stmt);
-//		EmartAccessories.insertAccessory(10, 20, stmt);
-//		EmartAccessories.deleteAccessory(10, 30, stmt);
-		//EmartAccessories.printAccessory(10,stmt);
-		//createTable(DiscAndShipPrcnt.create_table_sql,stmt);
-		//DiscAndShipPrcnt.insertDefaults(stmt);
 		//resetDB(stmt);
 		ConsoleUI.initialPrompt(stmt);
-
-		
-//		System.out.println(EmartPreviousOrders.create_table_sql);
-//		createTable(EmartPreviousOrders.create_table_sql,stmt);
-//		EmartPreviousOrders.dropEmartPreviousOrders(stmt);
-//		EmartPreviousOrders.insertPreviousOrder(101, 10, 40, 100, "2014-01-12", 500, stmt);
-//		EmartPreviousOrders.printall(stmt);
-//		EmartPreviousOrders.findPreviousOrdersByDate("2015-01-12", "2010-01-12",stmt);
-//		EmartPreviousOrders.deletePreviousOrders(101, 20, stmt);
 		conn.close();
 	}
 	
 	public static void resetDB(Statement stmt){
 		EmartCart.dropEmartCart(stmt);
-		EdepotItems.dropEdepotItem(stmt);
 		EmartCustomers.dropEmartCustomer(stmt);
-		createTable(EdepotItems.create_table_sql, stmt);
-		createTable(EmartCustomers.create_table_sql,stmt);	
+		EmartItems.dropEmartItems(stmt);
+		createTable(EmartCustomers.create_table_sql,stmt);
+		createTable(EmartItems.create_table_sql,stmt);
 		createTable(EmartCart.create_table_sql,stmt);
+
+
 	}
 	
 	public static void createTable(String sql, Statement stmt){
@@ -95,6 +51,7 @@ public class Main {
 		  System.out.println(se);
 	      se.printStackTrace();
 	   }
-	}
-	
+	}     
 }
+
+
