@@ -17,8 +17,9 @@ public class EmartItems {
 						             " PRIMARY KEY ( stockno ))";
 							
 	
-	public static void searchEmartItem(String stockno, Statement stmt) throws SQLException{
-		ResultSet rs = stmt.executeQuery ("select * from EmartItems where stockno ="+stockno);
+	public static void searchEmartItems(String stockno, String category, String manu, String modelno, String desc, Statement stmt) throws SQLException{
+		String sql = constructSearchQuery(stockno, category, manu, modelno, desc);
+		ResultSet rs = stmt.executeQuery (sql);
 		System.out.println("Your search returned:");
 		System.out.println("stockno,"+
 						   "category,"+
@@ -27,13 +28,12 @@ public class EmartItems {
 						   "description,"+
 						   "warranty,"+
 						   "price,"+
-						   "quantity,"+
-						   ") ");
+						   "quantity");
 		while(rs.next()){
 			// Get the value from column "columnName" with integer type
 			System.out.println(	   rs.getString("stockno").replaceAll("\\s+","")+","+
 								   rs.getString("category").replaceAll("\\s+","")+","+
-								   rs.getString("manufacturer").replaceAll("\\s+","")+",  desc:"+
+								   rs.getString("manufacturer").replaceAll("\\s+","")+","+
 								   rs.getString("modelno").replaceAll("\\s+","")+","+
 								   rs.getString("description").replaceAll("\\s+","")+",  "+
 								   rs.getInt("warranty")+","+
@@ -242,6 +242,47 @@ public class EmartItems {
 			  System.out.println(se);
 		      se.printStackTrace();
 		}
+	}
+	
+	public static String constructSearchQuery(String stockno, String category, String manu, String modelno, String desc){
+		int whereflag=0;
+		String sql = "select * from EmartItems ";
+		if(!stockno.equals("")){
+			if (whereflag==0){
+				sql+="WHERE stockno LIKE '%"+stockno+"%'";
+				whereflag=1;
+			}else
+				sql+=" AND stockno LIKE '%"+stockno+"%'";
+		}
+		if(!category.equals("")){
+			if (whereflag==0){
+				sql+="WHERE category LIKE '%"+category+"%'";
+				whereflag=1;
+			}else
+				sql+=" AND category LIKE '%"+category+"%'";
+		}
+		if(!manu.equals("")){
+			if (whereflag==0){
+				sql+="WHERE manufacturer LIKE '%"+manu+"%'";
+				whereflag=1;
+			}else
+				sql+=" AND manufacturer LIKE '%"+manu+"%'";
+		}
+		if(!modelno.equals("")){
+			if (whereflag==0){
+				sql+="WHERE modelno LIKE '%"+modelno+"%'";
+				whereflag=1;
+			}else
+				sql+=" AND modelno LIKE '%"+modelno+"%'";
+		}
+		if(!desc.equals("")){
+			if (whereflag==0){
+				sql+="WHERE description LIKE '%"+desc+"%'";
+				whereflag=1;
+			}else
+				sql+=" AND description LIKE '%"+desc+"%'";
+		}
+		return sql;
 	}
 }
 

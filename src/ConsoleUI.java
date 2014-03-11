@@ -107,7 +107,7 @@ public class ConsoleUI {
 			if(str.equals("1")){
 		        	CustomerAddItemsToCart(stmt,id);
 			}else if(str.equals("2")){
-				EmartItems.printallformatted(stmt);
+				CustomerSearchItems(stmt,id);
 	        	CustomerEditCart(stmt,id);
 		    }else if(str.equals("3")){
 		        	CustomerRemoveItemsCart(stmt,id);
@@ -120,6 +120,17 @@ public class ConsoleUI {
 			CustomerEditCart(stmt,id);
 	}
 
+	static void CustomerSearchItems(Statement stmt, String id) throws IOException, SQLException{
+		System.out.println("If you do not want to search by the prompted critia, just press enter");
+		System.out.println("Enter stockno:"); String stockno = br.readLine();
+		System.out.println("Enter manufacturer:"); String manu = br.readLine();
+		System.out.println("Enter modelno:"); String modelno = br.readLine();
+		System.out.println("Enter category:"); String category = br.readLine();
+		System.out.println("Enter description:"); String desc = br.readLine();
+		EmartItems.searchEmartItems(stockno, category, manu, modelno, desc, stmt);
+		LoggedInCustomerHandler(stmt, id);
+	}
+	
 	static void CustomerRemoveItemsCart( Statement stmt, String id) throws NumberFormatException, IOException, SQLException{
 		System.out.println("Enter stockno of item you would like to remove from cart, or press 0 to cancel");
 		String stock_no = br.readLine();
@@ -289,6 +300,7 @@ public class ConsoleUI {
 		}
 		ManagerEditCatalogHandler(stmt);
 	}
+	
 	
 	static void ManagerAddItemHandler(Statement stmt) throws NumberFormatException, IOException, SQLException{
 		while(true){

@@ -5,6 +5,7 @@ How to access oracls sql server:
 ssh ramonrovirosa@snoopy.cs.ucsb.edu
 sqlplus64 /nolog
 connect ramonrovirosa/4935854@uml.cs.ucsb.edu:1521/xexdb
+connect alexander_simes/4998837@uml.cs.ucsb.edu:1521/xexdb
 
 //Customer ID
 unique string
@@ -28,8 +29,9 @@ nnnnn five digit number ...can contain leading zeros
 Alex: Emart
 	X 1. ui for monthly sales report...take a look at EmartPreviousOrders.findPreviousOrdersByDate
 	X 2. accessories ui (can only add, not remove accessories)
-	3. search for items
+	X3. search for items
 	X4. update customer status through ui
+	5. figure out how we want to allow searching by accessory
 	
 Ramon: EDepot
 	receive shipping notice...update replenishment field
