@@ -161,10 +161,7 @@ public class EmartPreviousOrders {
 			EmartCart.insertItemInCart( rerunOrder.get(i).getItemID(),rerunOrder.get(i).getCustomerID(),EmartItems.getItemName(stmt, rerunOrder.get(i).getItemID()),rerunOrder.get(i).getQuantity(),stmt);
 		}
 		EmartCart.checkoutCart(customerID,stmt);
-		/*
-		for(int i=0;i<rerunOrder.size();i++){
-			EmartCart.decrementQuantity( rerunOrder.get(i).getItemID(),rerunOrder.get(i).getCustomerID(),rerunOrder.get(i).getQuantity(),stmt);
-		}*/
+		
 		rs.close();
 	}
 	

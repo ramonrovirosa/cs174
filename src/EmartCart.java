@@ -269,6 +269,7 @@ public class EmartCart {
 		for(int i=0;i<cartItems.size();i++){
 			EmartPreviousOrders.insertPreviousOrder(orderno, customerID, cartItems.get(i).getItemID(), cartItems.get(i).getQuantity(), now(), EmartItems.getItemPrice(stmt,cartItems.get(i).getItemID()), stmt);
 			deleteItemFromCartSilent(cartItems.get(i).getItemID(), customerID, stmt);
+			EmartItems.updateItemQuantitySubtract( cartItems.get(i).getItemID(),cartItems.get(i).getQuantity(),stmt);
 		}		
 		return;
 	}

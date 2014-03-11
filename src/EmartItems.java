@@ -183,7 +183,7 @@ public class EmartItems {
 		try{
 			stmt.executeUpdate(sql);
 			//System.out.println(sql);
-			System.out.println("Updated quantity to "+quantity);
+			//System.out.println("Updated quantity to "+quantity);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
