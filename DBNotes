@@ -16,9 +16,28 @@ unique string
 //		EmartCustomers.insertEmartCustomer("Sblack", "Alastor Moody", "Sblack", "sblack@cs","123 MyStreet, Goleta apt E, Ca", 1, stmt);
 //		EmartCustomers.insertEmartCustomer("Ddiggle", "Dedalus Diggle", "Ddiggle", "ddiggle@cs","123 MyStreet, Goleta apt F, Ca", 0, stmt);
 		
+		
+		
 
 //StockNumber
 XXnnnnn
 XX two letter A-Z combo (upercase only)
 nnnnn five digit number ...can contain leading zeros
+
+//TO DO
+Alex: Emart
+	1. ui for monthly sales report...take a look at EmartPreviousOrders.findPreviousOrdersByDate
+	2. accessories ui
+	3. search for items
+	
+Ramon: EDepot
+	receive shipping notice...update replenishment field
+	receive shipment..
+		-unpadte quantity, set replenishment to zero
+		-or create a new instance of an item if it does not exist in db.
+	
+	Interface to update when items have been sold...
+		-system.out.println(3 items below min stock level, send order to manufacturer)
+		
+	Call function to send order to manufacturer:	stock#,manuf, quantity 
 
