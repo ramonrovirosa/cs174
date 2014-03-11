@@ -134,19 +134,25 @@ public class EmartItems {
 		ArrayList<itemVar> rs1 = new ArrayList<itemVar>();
 
 		while(rs.next()){
-			itemVar item = new itemVar(rs.getInt("quantity"),rs.getString("stockno"),rs.getString("category"),rs.getInt("price"));
+			itemVar item = new itemVar(rs.getInt("quantity"),rs.getString("stockno"),rs.getString("category"),rs.getInt("price"),rs.getString("manufacturer"),rs.getString("modelno"),rs.getString("description"),rs.getInt("warranty"));
 			rs1.add(item);
 		}
 		rs.close();
 		for(int i=0;i<rs1.size();i++){
 			// Get the value from column "columnName" with integer type
-			System.out.println("Stock Number:"+rs1.get(i).getItemID()+
-							", Category:"+rs1.get(i).getCategory()+
+			System.out.println("******************************");
+			System.out.println("Stock Number:"+rs1.get(i).getItemID().trim()+
+							", Category:"+rs1.get(i).getCategory().trim()+
 							", Price: "+rs1.get(i).getPrice()+
-							", Quantity: "+rs1.get(i).getQuantity() 
+							", Quantity: "+rs1.get(i).getQuantity()+ 
+							", Manufacturer: "+rs1.get(i).getManu().trim()+ 
+							", ModelNo: "+rs1.get(i).getModel().trim()+ 
+							", Description: "+rs1.get(i).getDesc().trim()+ 
+							", Warrenty: "+rs1.get(i).getWarrenty()
 							);
 			EmartAccessories.printAccessory(rs1.get(i).getItemID(),stmt);
 		}
+		System.out.println("******************************");
 	}
 	
 	//update quantity
@@ -244,17 +250,37 @@ class itemVar{
 	String itemID;
 	String category;
 	int price;
-	public itemVar(int q, String i, String c, int p){
+	String manu;
+	String modelno;
+	String desc;
+	int warrenty;
+	public itemVar(int q, String i, String c, int p, String man, String md, String d, int w){
 		quantity=q;
 		itemID=i;
 		category=c;
 		price = p;
+		desc=d;
+		manu = man;
+		warrenty=w;
+		modelno = md;
 	}
 	public int getQuantity(){
 		return quantity;
 	}
+	public int getWarrenty(){
+		return warrenty;
+	}
 	public String getItemID(){
 		return itemID;
+	}
+	public String getManu(){
+		return manu;
+	}
+	public String getModel(){
+		return modelno;
+	}
+	public String getDesc(){
+		return desc;
 	}
 	public String getCategory(){
 		return category;

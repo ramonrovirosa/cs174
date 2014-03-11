@@ -120,6 +120,25 @@ public class EmartCustomers {
 		rs.close();
 	}
 		
+	
+	public static void printallformattedlong( Statement stmt) throws SQLException{
+		ResultSet rs = stmt.executeQuery ("select * from EmartCustomers");
+		   
+		// Iterate through the result and print the data
+		//System.out.println("contents of EmartCustomers:");
+		while(rs.next()){
+			// Get the value from column "columnName" with integer type
+			System.out.println("Customer ID: "+rs.getInt("customerID")+
+								", Name: "+  rs.getString("name").trim()+
+								", Status: "+rs.getString("status").trim()+
+								", Email: "+rs.getString("email").trim()+
+								", Address: "+rs.getString("address").trim()+
+								", Is a manager?: "+rs.getInt("isManager")
+
+							);
+		}
+		rs.close();
+	}
 	//remove by Customer ID
 	public static void removeByCustomerID(String customerID, Statement stmt){
 		String sql = "DELETE FROM EmartCustomers WHERE customerID = "+customerID;
@@ -160,7 +179,7 @@ public class EmartCustomers {
 				 " SET status='" + status +"'"+
 				 " Where "+ " customerID='"+customerID +"'";
 		try{
-			System.out.println(sql);
+			//System.out.println(sql);
 			stmt.executeUpdate(sql);
 		}catch(SQLException se){
 		      //Handle errors for JDBC

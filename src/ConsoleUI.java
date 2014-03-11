@@ -185,11 +185,13 @@ public class ConsoleUI {
 	
 	static void ManagerHandler(Statement stmt) throws IOException, SQLException{
 		
-		System.out.println("press 1 to edit Emart catalog, press 2 to sales from last month, press 0 to go back");
+		System.out.println("press 1 manage customers, press 2 to manage catalog, press 3 to sales from last month, press 0 to go back");
         String str = br.readLine();
         if(str.equals("1")){
-        	ManagerEditCatalogHandler(stmt);
+        	ManagerEditCustomersHandler(stmt);
         }else if(str.equals("2")){
+        	ManagerEditCatalogHandler(stmt);
+        }else if(str.equals("3")){
         	EmartPreviousOrders.findPreviousOrdersByDate(EmartCart.now(), EmartCart.monthAgo(), stmt );
         	ManagerHandler(stmt);
         }else if(str.equals("0")){
@@ -200,15 +202,44 @@ public class ConsoleUI {
         }
 	}
 	
+	static void ManagerEditCustomersHandler(Statement stmt) throws SQLException, IOException{
+		System.out.println("press 1 to view customers, press 2 to remove customers, press 3 to update customer status, press 0 to go back");
+		String str = br.readLine();
+        if(str.equals("1")){
+        	EmartCustomers.printallformattedlong(stmt);
+        	ManagerEditCustomersHandler(stmt);
+        }else if(str.equals("2")){
+        	System.out.println("Enter id of customer you wish to delete, 0 to cancel");
+        	String no = br.readLine();
+        	if(!no.equals("0")){
+        		EmartCustomers.removeByCustomerID(no, stmt);
+        	}
+        	ManagerEditCustomersHandler(stmt);
+        }else if(str.equals("3")){
+        	System.out.println("Enter id of customer you wish to update the status of, 0 to cancel");
+        	String no = br.readLine();
+        	if(!no.equals("0")){
+            	System.out.println("What would you like the new status to be? (New,Gold,Silver,Green)");
+            	String status = br.readLine();
+        		EmartCustomers.updateStatus(no,status,stmt);
+            	ManagerEditCustomersHandler(stmt);
+        	}
+        }else if(str.equals("0")){
+        	ManagerHandler(stmt);
+        }
+	}
+	
 	static void ManagerEditCatalogHandler(Statement stmt) throws SQLException, IOException{
-		EmartItems.printallformatted(stmt);
-		System.out.println("press 1 to add items, press 2 to remove items, press 3 to update items, press 0 to go back");
+		System.out.println("press 1 to view items, press 2 to add items, press 3 to remove items, press 4 to update items, press 0 to go back");
         String str = br.readLine();
-		 if(str.equals("1")){
+        if(str.equals("1")){
+    		EmartItems.printallformatted(stmt);
+    		ManagerEditCatalogHandler(stmt);
+        }else if(str.equals("2")){
 	        	ManagerAddItemHandler(stmt);
-		 }else if(str.equals("2")){
-			 ManagerRemoveItemHandler(stmt);
 		 }else if(str.equals("3")){
+			 ManagerRemoveItemHandler(stmt);
+		 }else if(str.equals("4")){
 			 ManagerUpdateItemHandler(stmt);
 	     }else if(str.equals("0")){
 	        	ManagerHandler(stmt);
