@@ -203,19 +203,12 @@ public class ConsoleUI {
 	}
 	
 	static void ManagerEditCustomersHandler(Statement stmt) throws SQLException, IOException{
-		System.out.println("press 1 to view customers, press 2 to remove customers, press 3 to update customer status, press 0 to go back");
+		System.out.println("press 1 to view customers, press 2 to update customer status, press 0 to go back");
 		String str = br.readLine();
         if(str.equals("1")){
         	EmartCustomers.printallformattedlong(stmt);
         	ManagerEditCustomersHandler(stmt);
         }else if(str.equals("2")){
-        	System.out.println("Enter id of customer you wish to delete, 0 to cancel");
-        	String no = br.readLine();
-        	if(!no.equals("0")){
-        		EmartCustomers.removeByCustomerID(no, stmt);
-        	}
-        	ManagerEditCustomersHandler(stmt);
-        }else if(str.equals("3")){
         	System.out.println("Enter id of customer you wish to update the status of, 0 to cancel");
         	String no = br.readLine();
         	if(!no.equals("0")){

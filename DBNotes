@@ -29,8 +29,7 @@ Alex: Emart
 	X 1. ui for monthly sales report...take a look at EmartPreviousOrders.findPreviousOrdersByDate
 	X 2. accessories ui (can only add, not remove accessories)
 	3. search for items
-	4. update customer status through ui
-	5. remove customers through ui
+	X4. update customer status through ui
 	
 Ramon: EDepot
 	receive shipping notice...update replenishment field
