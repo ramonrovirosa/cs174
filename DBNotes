@@ -32,6 +32,8 @@ Alex: Emart
 	X3. search for items
 	X4. update customer status through ui
 	5. figure out how we want to allow searching by accessory
+	6. remove entire orders or specific items in orders?
+	7. specs say customer needs to find order by number, right now we are just printing all of them
 	
 Ramon: EDepot
 	receive shipping notice...update replenishment field
