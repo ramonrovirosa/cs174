@@ -46,9 +46,16 @@ public class Main {
 //		EdepotItems.insertEdepotItem("601", "HP", 		"435", 	2,3,9, "F9",  0,stmt);
 //		EdepotItems.insertEdepotItem("602", "Cannon", 	"738", 	2,3,5, "F3",  0,stmt);
 		
-//		EdepotItems.updateEdepotQuantity("101", 2, stmt);
-//		EdepotItems.printall(stmt);
+//		EdepotItems.updateEdepotQuantity("101", 100, stmt);
+		
 //		EdepotItems.updateEdepotReplenishment("101", 500, stmt);
+//		EdepotItems.getQuantityForItem("101", stmt);
+//		EdepotItems.getReplenishmentForItem("101", stmt);
+//		EdepotItems.subtractQuantityForItemsSold("101", 15, stmt);
+//		EdepotItems.receiveShippingLabel( "102", "HP",       "6111", 1,2,10,"A9",  0,stmt);
+//		EdepotItems.receiveShipment("101", 2, stmt);
+		
+		EdepotItems.printall(stmt);
 		
 		conn.close();
 	}

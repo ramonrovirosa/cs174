@@ -48,12 +48,23 @@ Alex: Emart
 	7. specs say customer needs to find order by number, right now we are just printing all of them
 	
 Ramon: EDepot
-	Update Create Table Statement for Edepot Items
-
-	receive shipping notice...update replenishment field
-	receive shipment..
+	XUpdate Create Table Statement for Edepot Items
+	XUpdate functions with new table parameters especially now that stockno is a string instead of int
+	XInsert items in table ^^ as above
+	
+	Alex I added functions:
+		getReplenishment
+		setReplenishment
+		setReplenishmentToZero
+		getQuantityForItem returns int quantity
+		subtractQuantityForItemsSold
+		
+	X receive shipping notice...update replenishment field
+							 ...or create a new instance of an item if it does not exist in db.
+	Xreceive shipment..
+		//check that quantity is same as replenishment???
 		-unpadte quantity, set replenishment to zero
-		-or create a new instance of an item if it does not exist in db.
+		
 	
 	Interface to update when items have been sold...
 		-system.out.println(3 items below min stock level, send order to manufacturer)

@@ -109,6 +109,32 @@ public class EdepotItems {
 	      se.printStackTrace();
 	   }
 	}
+	public static void subtractQuantityForItemsSold(String stockno, int quantitySold, Statement stmt)throws SQLException{
+		int quantity = getQuantityForItem(stockno, stmt);
+		int newQuantity = quantity - quantitySold;
+		updateEdepotQuantity(stockno, newQuantity, stmt);
+	}
+	
+	public static int getQuantityForItem(String stockno,Statement stmt)throws SQLException{
+		ResultSet rs1;
+		String sql = "Select quantity FROM EdepotItems WHERE stockno='"+stockno +"'";
+		rs1 = stmt.executeQuery(sql);
+		rs1.next();
+		int quantity = rs1.getInt("quantity");
+		return quantity;
+	}
+	public static int getReplenishmentForItem(String stockno,Statement stmt)throws SQLException{
+		ResultSet rs1;
+		String sql = "Select replenishment FROM EdepotItems WHERE stockno='"+stockno +"'";
+		rs1 = stmt.executeQuery(sql);
+		rs1.next();
+		int replenishment = rs1.getInt("replenishment");
+		System.out.println(replenishment);
+		return replenishment;
+	}
+	public static void setReplenishmentToZero(String stockno, Statement stmt){
+		updateEdepotReplenishment(stockno, 0, stmt);
+	}
 	
 	public static void updateEdepotReplenishment(String stockno, int replenishment, Statement stmt){
 		String sql = "Update EdepotItems "+
@@ -135,12 +161,38 @@ public class EdepotItems {
 		      se.printStackTrace();
 		}
 	}
-	//
-	//createTable string...&& then get it and pass it to createTable(String sql, Statement stmt) inside of main
 	
-	//Shipment(with notice)
-	//	update replenishment for model #
-	//Shipment
-	//make sure shipment qty==replenishment.qty 
-	//update quantity inside of edepot items.
+	public static void receiveShippingLabel(String stockno, String manufacturer, String modelno, 
+			int min, int quantity, int max,
+			String location, int replenishment, Statement stmt){
+		//First check to see if item is allready in table
+		ResultSet rs1;
+		String item1="SELECT * From  EdepotItems WHERE stockno ='" + stockno+"'"; 
+		try{
+			//
+			rs1 = stmt.executeQuery(item1);
+			if(rs1.next()){
+				//update replenishment
+				updateEdepotReplenishment(stockno, quantity, stmt);
+			}else{
+				//insert item in table 
+				insertEdepotItem(stockno,manufacturer, modelno, 
+						min, 0, max,
+						location, quantity,stmt);
+			}	
+		}catch(SQLException se){
+	      //Handle errors for JDBC
+		  System.out.println(se);
+	      se.printStackTrace();
+	   }
+	
+	}
+	public static void receiveShipment(String stockno, int quantity, Statement stmt)throws SQLException{	
+		//check that quantity is same as replenishment??
+		int newQuantity = getReplenishmentForItem(stockno, stmt);
+		newQuantity+= getQuantityForItem(stockno,stmt);
+		updateEdepotQuantity(stockno, newQuantity,stmt);
+		setReplenishmentToZero(stockno,stmt);
+		
+	}
 }
