@@ -185,10 +185,13 @@ public class ConsoleUI {
 	
 	static void ManagerHandler(Statement stmt) throws IOException, SQLException{
 		
-		System.out.println("press 1 to edit Emart catalog, press 0 to go back");
+		System.out.println("press 1 to edit Emart catalog, press 2 to sales from last month, press 0 to go back");
         String str = br.readLine();
         if(str.equals("1")){
         	ManagerEditCatalogHandler(stmt);
+        }else if(str.equals("2")){
+        	EmartPreviousOrders.findPreviousOrdersByDate(EmartCart.now(), EmartCart.monthAgo(), stmt );
+        	ManagerHandler(stmt);
         }else if(str.equals("0")){
         	initialPrompt(stmt);
         }else{
@@ -290,18 +293,46 @@ public class ConsoleUI {
 			int warrenty = Integer.parseInt(br.readLine());			
 			System.out.println("Enter price of new item");
 			int price = Integer.parseInt(br.readLine());
-			
 			EmartItems.insertEmartItem(stockno, category, manu, modelno, desc,warrenty, price,quantity, stmt);
-			System.out.println("Would you like to add antoher item? (y/n)");
-			String rs = br.readLine();
-			if (rs.equals("n")){
+			ManagerAccessoryHandler(stockno,stmt);
+			System.out.println("Would you like to add antoher item to Emart? (y/n)");
+			String r = br.readLine();
+			if (r.equals("n")){
 				break;
-			}else if(!rs.equals("y")){
+			}else if(!r.equals("y")){
 				System.out.println("Couldn't read input, going back to manager menu");
 				ManagerHandler(stmt);
 			}
 		}
 		ManagerEditCatalogHandler(stmt);
+	}
+
+	static void ManagerAccessoryHandler(String stockno, Statement stmt) throws IOException{
+		System.out.println("Is this item an accessory of another item?(y,n)");
+		if (br.readLine().equals("y")){
+			while(true){
+				System.out.println("Please enter the stock number of an item that has this item as an accessory");
+				String parent = br.readLine();
+				EmartAccessories.insertAccessory(parent, stockno, stmt);
+				System.out.println("Would you like to add another item  that has this item as an accessory?(y,n)");
+				if(br.readLine().equals("n")){
+					break;
+				}
+			}
+		}
+		System.out.println("Does this item have accessories?(y,n)");
+		if (br.readLine().equals("y")){
+			while(true){
+				System.out.println("Please enter the stock number of an item that accessorizes this item");
+				String parent = br.readLine();
+				EmartAccessories.insertAccessory(stockno, parent, stmt);
+				System.out.println("Would you like to add another accessory for this item?(y,n)");
+				if(br.readLine().equals("n")){
+					break;
+				}
+			}
+		}
+		return;
 	}
 
 }

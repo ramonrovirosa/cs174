@@ -5,13 +5,13 @@ import java.sql.Statement;
 
 public class EmartAccessories {
 	static String create_table_sql = " CREATE TABLE EmartAccessories" +
-									 " (stockno INTEGER not NULL, " + 
-									 " accesoryno INTEGER, "+
+									 " (stockno CHAR(20) not NULL, " + 
+									 " accesoryno CHAR(20), "+
 									 " PRIMARY KEY (stockno, accesoryno),"+
 									 " FOREIGN KEY (stockno) REFERENCES EmartItems (stockno)," +
 									 " FOREIGN KEY (accesoryno) REFERENCES EmartItems (stockno)" +
 									 ")";
-	public static void insertAccessory(int stockno, int accesoryno, Statement stmt){
+	public static void insertAccessory(String stockno, String accesoryno, Statement stmt){
 		String insert = "INSERT INTO EmartAccessories ("+
 												   "stockno,"+
 												   "accesoryno"+
@@ -20,22 +20,23 @@ public class EmartAccessories {
 													   + "'" + accesoryno + "')";
 		try{
 			stmt.executeUpdate(insert);
-			System.out.println(insert);
+			//System.out.println(insert);
 		}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);
 		      se.printStackTrace();
 	   }	
 	}
+	
 	//print
-	public static void printAccessory(int stockno, Statement stmt){
+	public static void printAccessory(String stockno, Statement stmt){
 		ResultSet rs1;
 		String query = "Select accesoryno FROM EmartAccessories WHERE stockno='"+stockno +"'";
 		try{
 			//get previous orders 1 & 2 for customers
 			rs1 = stmt.executeQuery(query);
 			while(rs1.next()){
-				System.out.println("Accessory for Item "+stockno+": "+ rs1.getInt("accesoryno"));
+				System.out.println("An accessory for "+stockno.trim()+" is: "+ rs1.getString("accesoryno").trim());
 			}
 		}catch(SQLException se){
 		      //Handle errors for JDBC

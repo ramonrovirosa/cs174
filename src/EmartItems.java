@@ -1,6 +1,7 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
 public class EmartItems {
@@ -130,15 +131,22 @@ public class EmartItems {
 		   
 		// Iterate through the result and print the data
 		System.out.println("Contents of your Emart Catalog:");
+		ArrayList<itemVar> rs1 = new ArrayList<itemVar>();
+
 		while(rs.next()){
-			// Get the value from column "columnName" with integer type
-			System.out.println("Stock Number:"+rs.getString("stockno").trim()+
-							", Category:"+rs.getString("category").trim()+
-							", Price: "+rs.getString("price")+
-							", Quantity: "+rs.getInt("quantity") 
-							);
+			itemVar item = new itemVar(rs.getInt("quantity"),rs.getString("stockno"),rs.getString("category"),rs.getInt("price"));
+			rs1.add(item);
 		}
 		rs.close();
+		for(int i=0;i<rs1.size();i++){
+			// Get the value from column "columnName" with integer type
+			System.out.println("Stock Number:"+rs1.get(i).getItemID()+
+							", Category:"+rs1.get(i).getCategory()+
+							", Price: "+rs1.get(i).getPrice()+
+							", Quantity: "+rs1.get(i).getQuantity() 
+							);
+			EmartAccessories.printAccessory(rs1.get(i).getItemID(),stmt);
+		}
 	}
 	
 	//update quantity
@@ -228,6 +236,31 @@ public class EmartItems {
 			  System.out.println(se);
 		      se.printStackTrace();
 		}
+	}
+}
+
+class itemVar{
+	int quantity;
+	String itemID;
+	String category;
+	int price;
+	public itemVar(int q, String i, String c, int p){
+		quantity=q;
+		itemID=i;
+		category=c;
+		price = p;
+	}
+	public int getQuantity(){
+		return quantity;
+	}
+	public String getItemID(){
+		return itemID;
+	}
+	public String getCategory(){
+		return category;
+	}
+	public int getPrice(){
+		return price;
 	}
 }
 

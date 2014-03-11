@@ -109,7 +109,7 @@ public class EmartCustomers {
 		ResultSet rs = stmt.executeQuery ("select * from EmartCustomers");
 		   
 		// Iterate through the result and print the data
-		System.out.println("contents of EmartCustomers:");
+		//System.out.println("contents of EmartCustomers:");
 		while(rs.next()){
 			// Get the value from column "columnName" with integer type
 			System.out.println("Customer ID: "+rs.getInt("customerID")+

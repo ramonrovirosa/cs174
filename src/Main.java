@@ -29,7 +29,7 @@ public class Main {
 //		resetDB(stmt);
 		//EmartPreviousOrders.dropEmartPreviousOrders(stmt);
 		//createTable(EmartPreviousOrders.create_table_sql,stmt);
-
+		//createTable(EmartAccessories.create_table_sql, stmt);
 		ConsoleUI.initialPrompt(stmt);
 		conn.close();
 	}

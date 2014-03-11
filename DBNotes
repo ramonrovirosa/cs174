@@ -26,8 +26,8 @@ nnnnn five digit number ...can contain leading zeros
 
 //TO DO
 Alex: Emart
-	1. ui for monthly sales report...take a look at EmartPreviousOrders.findPreviousOrdersByDate
-	2. accessories ui
+	X 1. ui for monthly sales report...take a look at EmartPreviousOrders.findPreviousOrdersByDate
+	X 2. accessories ui (can only add, not remove accessories)
 	3. search for items
 	
 Ramon: EDepot

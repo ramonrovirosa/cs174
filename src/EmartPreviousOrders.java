@@ -96,7 +96,7 @@ public class EmartPreviousOrders {
 	//Date format yyyy-mm-dd
 	public static void findPreviousOrdersByDate(String ordersBeforeDate, String ordersAfterDate,  Statement stmt)throws SQLException{
 		//if you are only asked to check the orders before a certain date, then use the first if.
-		//if you are checking orders beetween a specified period than else
+		//if you are checking orders between a specified period than else
 		String query = "";
 		if(ordersAfterDate == ""){
 			query = "Select * FROM EmartPreviousOrders WHERE orderDate <= "+"TO_DATE(" +"'" + ordersBeforeDate +"','yyyy-mm-dd"+ "')";
@@ -108,20 +108,20 @@ public class EmartPreviousOrders {
 		ResultSet rs = stmt.executeQuery (query);
 		   
 		System.out.println("EmartPreviousOrders before date "+ordersBeforeDate+":");
-		System.out.println( "orderno, "+
-				"customerID, "+
-				"itemID, "+
-				"quantity, "+
-				"orderDate, "+
+		System.out.println( "orderno,  "+
+				"customerID,    "+
+				"itemID,    "+
+				"quantity,    "+
+				"orderDate,    "+
 				"price"
 				);
 		while(rs.next()){
 			// Get the value from column "columnName" with integer type
-			System.out.println(rs.getInt("orderno")+"      "+
-					   rs.getString("customerID")+"          "+
-					   rs.getString("itemID")+"      "+
+			System.out.println(rs.getInt("orderno")+"        "+
+					   rs.getString("customerID").trim()+"          "+
+					   rs.getString("itemID").trim()+"      "+
 					   rs.getInt("quantity")+"         "+
-					   rs.getDate("orderDate")+"  "+
+					   rs.getDate("orderDate")+"     "+
 					   rs.getInt("price") 
 				);
 		}

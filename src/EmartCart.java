@@ -309,7 +309,14 @@ public class EmartCart {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
 		return sdf.format(cal.getTime());
-		}
+	}
+	
+	public static String monthAgo() {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+		cal.add(Calendar.MONTH, -1);
+		return sdf.format(cal.getTime());
+	}
 }
 
 class cartItemInfo{
