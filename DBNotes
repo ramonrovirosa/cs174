@@ -17,7 +17,19 @@ unique string
 //		EmartCustomers.insertEmartCustomer("Sblack", "Alastor Moody", "Sblack", "sblack@cs","123 MyStreet, Goleta apt E, Ca", 1, stmt);
 //		EmartCustomers.insertEmartCustomer("Ddiggle", "Dedalus Diggle", "Ddiggle", "ddiggle@cs","123 MyStreet, Goleta apt F, Ca", 0, stmt);
 		
-		
+//Edepot Items
+//		
+//		EdepotItems.insertEdepotItem("101", "HP",       "6111", 1,2,10,"A9",  0,stmt);
+//		EdepotItems.insertEdepotItem("201", "Dell",     "420", 	2,3,15,"A7",  0,stmt);
+//		EdepotItems.insertEdepotItem("202", "Emachine", "3958",	2,4,8, "B52", 0,stmt);
+//		EdepotItems.insertEdepotItem("301", "Envision", "720", 	3,4,6, "C27", 0,stmt);
+//		EdepotItems.insertEdepotItem("302", "Samsung",  "712", 	3,4,6, "C13", 0,stmt);
+//		EdepotItems.insertEdepotItem("401", "Symantec", "2005", 5,7,9, "D27", 0,stmt);
+//		EdepotItems.insertEdepotItem("402", "Mcafee",   "2005", 5,7,9, "D1",  0,stmt);
+//		EdepotItems.insertEdepotItem("501", "HP", 		"1320", 2,3,5, "E7",  0,stmt);
+//		EdepotItems.insertEdepotItem("601", "HP", 		"435", 	2,3,9, "F9",  0,stmt);
+//		EdepotItems.insertEdepotItem("602", "Cannon", 	"738", 	2,3,5, "F3",  0,stmt);
+
 		
 
 //StockNumber
@@ -36,6 +48,8 @@ Alex: Emart
 	7. specs say customer needs to find order by number, right now we are just printing all of them
 	
 Ramon: EDepot
+	Update Create Table Statement for Edepot Items
+
 	receive shipping notice...update replenishment field
 	receive shipment..
 		-unpadte quantity, set replenishment to zero
@@ -45,4 +59,6 @@ Ramon: EDepot
 		-system.out.println(3 items below min stock level, send order to manufacturer)
 		
 	Call function to send order to manufacturer:	stock#,manuf, quantity 
+	
+	
 
