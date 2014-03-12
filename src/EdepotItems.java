@@ -162,9 +162,13 @@ public class EdepotItems {
 		}
 	}
 	
-	public static void receiveShippingLabel(String stockno, String manufacturer, String modelno, 
+	public static void receiveShippingNotice(String shippingNoticeID, String companyName,
+			String stockno, String manufacturer, String modelno, 
 			int min, int quantity, int max,
-			String location, int replenishment, Statement stmt){
+			String location, Statement stmt){
+		
+		EdepotShippingNotice.insertEdepotItem(shippingNoticeID, companyName, manufacturer, modelno, quantity,  stmt);
+		
 		//First check to see if item is allready in table
 		ResultSet rs1;
 		String item1="SELECT * From  EdepotItems WHERE stockno ='" + stockno+"'"; 
@@ -187,12 +191,18 @@ public class EdepotItems {
 	   }
 	
 	}
-	public static void receiveShipment(String stockno, int quantity, Statement stmt)throws SQLException{	
-		//check that quantity is same as replenishment??
-		int newQuantity = getReplenishmentForItem(stockno, stmt);
-		newQuantity+= getQuantityForItem(stockno,stmt);
-		updateEdepotQuantity(stockno, newQuantity,stmt);
-		setReplenishmentToZero(stockno,stmt);
+	public static void receiveShipment(String shippingNoticeID, String stockno, Statement stmt)throws SQLException{	
+		//check that a shipping notice was received
+		boolean received = EdepotShippingNotice.shippingNoticeWasReceived(shippingNoticeID, stmt);
+		if(received){
+			EdepotShippingNotice.updateShipmentReceivedToTrue(shippingNoticeID,stmt);
+			int newQuantity = getReplenishmentForItem(stockno, stmt);
+			newQuantity+= getQuantityForItem(stockno,stmt);
+			updateEdepotQuantity(stockno, newQuantity,stmt);
+			setReplenishmentToZero(stockno,stmt);
+		}else{
+			System.out.println("SORRY, The Shipping Notice Was Never Received");
+		}
 		
 	}
 }

@@ -54,9 +54,16 @@ public class Main {
 //		EdepotItems.subtractQuantityForItemsSold("101", 15, stmt);
 //		EdepotItems.receiveShippingLabel( "102", "HP",       "6111", 1,2,10,"A9",  0,stmt);
 //		EdepotItems.receiveShipment("101", 2, stmt);
-		
+//		EdepotItems.receiveShippingNotice("102", "ramon movers", "101", "HP", "6111", 1, 2, 10, "A9", stmt);
+//		EdepotItems.receiveShipment("101", "101", stmt);
 		EdepotItems.printall(stmt);
 		
+//		createTable(EdepotShippingNotice.create_table_sql,stmt);
+//		EdepotShippingNotice.insertEdepotItem("101", "ramon shipping", "HP", "6111", 5, stmt);
+//		EdepotShippingNotice.updateShipmentReceivedToTrue("101", stmt);
+//		System.out.println(EdepotShippingNotice.shippingNoticeWasReceived("101", stmt));
+		EdepotShippingNotice.printall(stmt);
+
 		conn.close();
 	}
 	
