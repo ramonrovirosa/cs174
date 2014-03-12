@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.ArrayList;
 
 
 public class EdepotItems {
@@ -113,6 +114,8 @@ public class EdepotItems {
 		int quantity = getQuantityForItem(stockno, stmt);
 		int newQuantity = quantity - quantitySold;
 		updateEdepotQuantity(stockno, newQuantity, stmt);
+		//check to see if you need to send a replenishment order
+		checkIfNeedToSendReplenishmentOrder(stockno,stmt);
 	}
 	
 	public static int getQuantityForItem(String stockno,Statement stmt)throws SQLException{
@@ -205,4 +208,55 @@ public class EdepotItems {
 		}
 		
 	}
+
+	public static void checkIfNeedToSendReplenishmentOrder(String stockno,Statement stmt)throws SQLException{
+		String sql = "Select manufacturer FROM EdepotItems WHERE stockno='"+stockno+"'";
+		ResultSet rs = stmt.executeQuery (sql);
+		rs.next();
+		String manufacturer= rs.getString("manufacturer").replaceAll("\\s+","");
+		String checkQuantity="Select stockno, quantity, max "+
+							 "FROM EdepotItems "+
+							 "WHERE manufacturer='"+manufacturer+"' "+
+							 "AND min>=quantity";
+		rs=stmt.executeQuery(checkQuantity);
+		ArrayList<replenishMentOrderVariables> rs1 = new ArrayList<replenishMentOrderVariables>();
+		replenishMentOrderVariables item;
+		while(rs.next()){
+			item=new replenishMentOrderVariables(
+					 rs.getString("stockno").replaceAll("\\s+",""),
+					 rs.getInt("quantity"),
+					 rs.getInt("max")
+					);
+			rs1.add(item);
+		}
+		if(rs1.size()>=3){
+			System.out.println("Need to Send replenishment order to manufacturer "+manufacturer+" for: ");
+			for(int i=0;i<rs1.size();i++){
+				System.out.println(
+							"Stocknumber: "+ rs1.get(i).getS() + ", "+
+							"Manufacturer: "+ manufacturer + ", "+
+							"Quantity to order: "+ (rs1.get(i).getM() - rs1.get(i).getQ())
+						);
+			}
+		}
+	}
+	
 }
+class replenishMentOrderVariables{
+	String stockno;
+	int quantity, max;
+	public replenishMentOrderVariables(String no, int q, int m){
+		stockno=no;
+		quantity=q;
+		max=m;
+	}
+	public String getS(){
+		return stockno;
+	}
+	public int getQ(){
+		return quantity;
+	}
+	public int getM(){
+		return max;
+	}
+} 

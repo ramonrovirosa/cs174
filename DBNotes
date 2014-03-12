@@ -62,7 +62,7 @@ Ramon: EDepot
 	X receive shipping notice...update replenishment field
 							 ...or create a new instance of an item if it does not exist in db.
 							 
-	For receive shipping notice, I am going to create a table with columns:
+	XFor receive shipping notice, I am going to create a table with columns:
 		Shipping notice: shippingNoticeID, shipping company name, list of items(manufacturer, model number, quantity)
 	
 	Xreceive shipment..

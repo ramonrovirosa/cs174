@@ -45,6 +45,7 @@ public class Main {
 //		EdepotItems.insertEdepotItem("501", "HP", 		"1320", 2,3,5, "E7",  0,stmt);
 //		EdepotItems.insertEdepotItem("601", "HP", 		"435", 	2,3,9, "F9",  0,stmt);
 //		EdepotItems.insertEdepotItem("602", "Cannon", 	"738", 	2,3,5, "F3",  0,stmt);
+//		EdepotItems.updateEdepotQuantity("101", 1, stmt);
 		
 //		EdepotItems.updateEdepotQuantity("101", 100, stmt);
 		
@@ -57,12 +58,13 @@ public class Main {
 //		EdepotItems.receiveShippingNotice("102", "ramon movers", "101", "HP", "6111", 1, 2, 10, "A9", stmt);
 //		EdepotItems.receiveShipment("101", "101", stmt);
 		EdepotItems.printall(stmt);
+//		EdepotItems.checkIfNeedToSendReplenishmentOrder("201", stmt);
 		
 //		createTable(EdepotShippingNotice.create_table_sql,stmt);
 //		EdepotShippingNotice.insertEdepotItem("101", "ramon shipping", "HP", "6111", 5, stmt);
 //		EdepotShippingNotice.updateShipmentReceivedToTrue("101", stmt);
 //		System.out.println(EdepotShippingNotice.shippingNoticeWasReceived("101", stmt));
-		EdepotShippingNotice.printall(stmt);
+//		EdepotShippingNotice.printall(stmt);
 
 		conn.close();
 	}
