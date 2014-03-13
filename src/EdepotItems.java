@@ -26,6 +26,49 @@ public class EdepotItems {
 //		}
 //		rs.close();
 //	}
+	
+
+	public static String getManufacturer(String stockno,Statement stmt)throws SQLException{
+		ResultSet rs1;
+		String sql = "Select manufacturer FROM EdepotItems WHERE stockno='"+stockno +"'";
+		rs1 = stmt.executeQuery(sql);
+		rs1.next();
+		String manu = rs1.getString("manufacturer");
+		return manu;
+	}
+	public static String getLocation(String stockno,Statement stmt)throws SQLException{
+		ResultSet rs1;
+		String sql = "Select location FROM EdepotItems WHERE stockno='"+stockno +"'";
+		rs1 = stmt.executeQuery(sql);
+		rs1.next();
+		String loc = rs1.getString("location");
+		return loc;
+	}
+	public static String getModelno(String stockno,Statement stmt)throws SQLException{
+		ResultSet rs1;
+		String sql = "Select modelno FROM EdepotItems WHERE stockno='"+stockno +"'";
+		rs1 = stmt.executeQuery(sql);
+		rs1.next();
+		String modelno = rs1.getString("modelno");
+		return modelno;
+	}
+	public static int getMin(String stockno,Statement stmt)throws SQLException{
+		ResultSet rs1;
+		String sql = "Select min FROM EdepotItems WHERE stockno='"+stockno +"'";
+		rs1 = stmt.executeQuery(sql);
+		rs1.next();
+		int min = rs1.getInt("min");
+		return min;
+	}
+	public static int getMax(String stockno,Statement stmt)throws SQLException{
+		ResultSet rs1;
+		String sql = "Select max FROM EdepotItems WHERE stockno='"+stockno +"'";
+		rs1 = stmt.executeQuery(sql);
+		rs1.next();
+		int max = rs1.getInt("max");
+		return max;
+	}
+
 	//print whole table
 	public static void printall( Statement stmt) throws SQLException{
 		ResultSet rs = stmt.executeQuery ("select * from EdepotItems");
@@ -56,10 +99,10 @@ public class EdepotItems {
 	}
 	//remove by stockno
 	public static void removebystockno(String stockno, Statement stmt){
-		String sql = "DELETE FROM EdepotItems WHERE stockno = "+stockno;
+		String sql = "DELETE FROM EdepotItems WHERE stockno = '"+stockno+"'";
 		try{
 			stmt.executeUpdate(sql);
-			System.out.println("removed stockno"+stockno+" from the database");
+			System.out.println("removed item no. "+stockno+" from the database");
 		}catch(SQLException se){
 	      //Handle errors for JDBC
 		  System.out.println(se);
@@ -90,7 +133,8 @@ public class EdepotItems {
 										   + "'" + replenishment + "')";	
 		try{
 			stmt.executeUpdate(sql);
-			System.out.println(sql);
+			//System.out.println(sql);
+			System.out.println("Inserted item no. "+stockno+" into Edepot");
 		}catch(SQLException se){
 	      //Handle errors for JDBC
 		  System.out.println(se);
@@ -169,9 +213,7 @@ public class EdepotItems {
 			String stockno, String manufacturer, String modelno, 
 			int min, int quantity, int max,
 			String location, Statement stmt){
-		
-		EdepotShippingNotice.insertEdepotItem(shippingNoticeID, companyName, manufacturer, modelno, quantity,  stmt);
-		
+				
 		//First check to see if item is allready in table
 		ResultSet rs1;
 		String item1="SELECT * From  EdepotItems WHERE stockno ='" + stockno+"'"; 
@@ -192,10 +234,13 @@ public class EdepotItems {
 		  System.out.println(se);
 	      se.printStackTrace();
 	   }
+		EdepotShippingNotice.insertEdepotShippingNotice(shippingNoticeID, stockno, companyName, manufacturer, modelno, quantity,  stmt);
 	
 	}
-	public static void receiveShipment(String shippingNoticeID, String stockno, Statement stmt)throws SQLException{	
+
+	public static void receiveShipment(String shippingNoticeID, Statement stmt)throws SQLException{	
 		//check that a shipping notice was received
+		String stockno = EdepotShippingNotice.getStockNo(shippingNoticeID, stmt);
 		boolean received = EdepotShippingNotice.shippingNoticeWasReceived(shippingNoticeID, stmt);
 		if(received){
 			EdepotShippingNotice.updateShipmentReceivedToTrue(shippingNoticeID,stmt);

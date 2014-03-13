@@ -13,13 +13,224 @@ public class ConsoleUI {
         }else if (str.equals("2")){
         	LoginManagerHandler(stmt);
         }else if (str.equals("3")){
-        	return;
+        	EdepotLoginHandler(stmt);
         }else if (str.equals("0")){
         	System.exit(0);
         }else{
         	System.out.println("Could not read input...");
         	initialPrompt(stmt);
         }
+	}
+	
+	static void EdepotLoginHandler(Statement stmt) throws SQLException, IOException{
+		 System.out.println("Current Customers in our system:");
+		 EmartCustomers.printallformatted(stmt);
+		 while(true){
+			 System.out.println("Please enter manager ID you wish to log in as, press 0 to cancel");
+			 String id = br.readLine();
+			 if(id.equals("0")){
+				 initialPrompt(stmt);
+				 break;
+			 }
+			 if(EmartCustomers.isManager(id, stmt)){
+				 String name = EmartCustomers.getCustomerName(id,stmt);
+				 System.out.println("Welcome "+name.trim()+"!");
+				 EdepotHandler( stmt );
+				 break;
+			 }else{
+				 System.out.println("This is not a manager accout no, try again");
+			 }
+		 }
+	}
+	
+	static void EdepotHandler(Statement stmt) throws IOException, SQLException{
+		System.out.println("press 1 manage edepot items, press 2 to manage shipping notices, press 0 to go back");
+        String str = br.readLine();
+        if(str.equals("1")){
+        	ManageEdepotItems(stmt);
+        }else if(str.equals("2")){
+        	ManageShippingNotices(stmt);
+        }else if(str.equals("0")){
+        	initialPrompt(stmt);
+        }else{
+        	System.out.println("Could not read input...");
+        	ManagerHandler(stmt);
+        }
+	}
+	
+	static void ManageShippingNotices(Statement stmt) throws NumberFormatException, IOException, SQLException{
+		System.out.println("press 1 to view shipping notices, press 2 to create shipping notice, "
+				+ "press 3 to receive shipping notice, press 0 to go back");
+        String str = br.readLine();
+        if(str.equals("1")){
+        	EdepotShippingNotice.printall(stmt);
+        	ManageShippingNotices(stmt);
+        }else if(str.equals("2")){
+        	AddShippingNotice(stmt);
+        }else if(str.equals("3")){
+        	ReceiveShipment(stmt);
+        }else if(str.equals("0")){
+        	EdepotHandler(stmt);
+        }else{
+        	System.out.println("Could not read input...");
+        	ManagerHandler(stmt);
+        }
+	}
+	
+	static void ReceiveShipment(Statement stmt) throws NumberFormatException, IOException, SQLException{
+		while(true){
+			System.out.println("Enter shipping notice id you wish to receive:");
+			String shippingNoticeID = br.readLine();	
+			EdepotItems.receiveShipment(shippingNoticeID, stmt);
+			System.out.println("Would you like to receive antoher shipping notice? (y/n)");
+			String r = br.readLine();
+			if (r.equals("n")){
+				break;
+			}else if(!r.equals("y")){
+				System.out.println("Couldn't read input, going back to manager menu");
+				ManageEdepotItems(stmt);
+			}
+		}
+		ManageShippingNotices(stmt);
+	}
+	
+	static void AddShippingNotice(Statement stmt) throws NumberFormatException, IOException, SQLException{
+		while(true){
+			System.out.println("Enter new shipping notice id:");
+			String shippingNoticeID = br.readLine();
+			System.out.println("Enter new stockno:");
+			String stockno = br.readLine();
+			System.out.println("Enter quantity to ship");
+			int quantity = Integer.parseInt(br.readLine());
+			System.out.println("Enter new shipping company name:");
+			String companyName = br.readLine();
+			String manufacturer = EdepotItems.getManufacturer(stockno, stmt);
+			String modelno = EdepotItems.getModelno(stockno, stmt);
+			String location = EdepotItems.getLocation(stockno, stmt);
+
+			int min  = EdepotItems.getMin(stockno, stmt);
+			int max = EdepotItems.getMax(stockno, stmt);
+			EdepotItems.receiveShippingNotice(shippingNoticeID, companyName, stockno, manufacturer, modelno, 
+					min, quantity, max, location, stmt);
+			System.out.println("Would you like to add antoher shipping notice? (y/n)");
+			String r = br.readLine();
+			if (r.equals("n")){
+				break;
+			}else if(!r.equals("y")){
+				System.out.println("Couldn't read input, going back to manager menu");
+				ManageEdepotItems(stmt);
+			}
+		}
+		ManageShippingNotices(stmt);
+	}
+			
+	static void ManageEdepotItems(Statement stmt) throws NumberFormatException, IOException, SQLException{
+		System.out.println("press 1 to view items, press 2 to add new item, press 3 to update quantity of existing item,\n "
+				+ "press 4 to remove item, press 0 to go back");
+        String str = br.readLine();
+        if(str.equals("1")){
+        	EdepotItems.printall(stmt);
+        	ManageEdepotItems(stmt);
+        }else if(str.equals("2")){
+        	AddEdepotItem(stmt);
+        }else if(str.equals("3")){
+        	UpdateEdepotItem(stmt);
+        }else if(str.equals("4")){
+        	RemoveEdepotItem(stmt);
+        }else if(str.equals("0")){
+        	EdepotHandler(stmt);
+        }else{
+        	System.out.println("Could not read input...");
+        	ManagerHandler(stmt);
+        }
+	}
+	
+	static void RemoveEdepotItem(Statement stmt) throws NumberFormatException, IOException, SQLException{
+		while(true){
+			String stockno="";
+			while(true){
+				System.out.println("Enter stockno of item you wish to remove:");
+				stockno = br.readLine();
+				if(!stockno.matches("[A-Z][A-Z][0-9][0-9][0-9][0-9][0-9]")){
+					System.out.println("Invalid stock number, try again");
+				}else{break;}	
+			}		
+			EdepotItems.removebystockno( stockno, stmt);
+			System.out.println("Would you like to remove another item in Edepot? (y/n)");
+			String r = br.readLine();
+			if (r.equals("n")){
+				break;
+			}else if(!r.equals("y")){
+				System.out.println("Couldn't read input, going back to manager menu");
+				ManageEdepotItems(stmt);
+			}
+		}
+		ManageEdepotItems(stmt);
+}
+	
+	static void UpdateEdepotItem(Statement stmt) throws NumberFormatException, IOException, SQLException{
+		while(true){
+			String stockno="";
+			while(true){
+				System.out.println("Enter stockno of item you wish to update:");
+				stockno = br.readLine();
+				if(!stockno.matches("[A-Z][A-Z][0-9][0-9][0-9][0-9][0-9]")){
+					System.out.println("Invalid stock number, try again");
+				}else{break;}	
+			}
+			System.out.println("Enter new quantity of new item:");
+			int quantity = Integer.parseInt(br.readLine());		
+			EdepotItems.updateEdepotQuantity( stockno, quantity, stmt);
+			System.out.println("Would you like to update another item in Edepot? (y/n)");
+			String r = br.readLine();
+			if (r.equals("n")){
+				break;
+			}else if(!r.equals("y")){
+				System.out.println("Couldn't read input, going back to manager menu");
+				ManageEdepotItems(stmt);
+			}
+		}
+		ManageEdepotItems(stmt);
+}
+	
+	static void AddEdepotItem(Statement stmt) throws NumberFormatException, IOException, SQLException{
+				while(true){
+					String stockno="";
+					while(true){
+						System.out.println("Enter stockno of new item:");
+						stockno = br.readLine();
+						if(!stockno.matches("[A-Z][A-Z][0-9][0-9][0-9][0-9][0-9]")){
+							System.out.println("Invalid stock number, try again");
+						}else{
+							break;
+						}
+							
+					}
+					System.out.println("Enter manufacturer of new item:");
+					String manufacturer = br.readLine();
+					System.out.println("Enter modelno of new item:");
+					String modelno = br.readLine();
+					System.out.println("Enter min quantity of new item:");
+					int min = Integer.parseInt(br.readLine());
+					System.out.println("Enter max quantity of new item:");
+					int max = Integer.parseInt(br.readLine());
+					System.out.println("Enter quantity of new item:");
+					int quantity = Integer.parseInt(br.readLine());
+					System.out.println("Enter location of new item:");
+					String location = br.readLine();
+					System.out.println("Enter replenishment of new item:");
+					int replenishment = Integer.parseInt(br.readLine());			
+					EdepotItems.insertEdepotItem( stockno, manufacturer, modelno, min, quantity, max, location, replenishment, stmt);
+					System.out.println("Would you like to add antoher item to Edepot? (y/n)");
+					String r = br.readLine();
+					if (r.equals("n")){
+						break;
+					}else if(!r.equals("y")){
+						System.out.println("Couldn't read input, going back to manager menu");
+						ManageEdepotItems(stmt);
+					}
+				}
+				ManageEdepotItems(stmt);
 	}
 	
 	 static void CustomerHandler( Statement stmt) throws IOException, SQLException{
@@ -195,7 +406,6 @@ public class ConsoleUI {
 	}
 	
 	static void ManagerHandler(Statement stmt) throws IOException, SQLException{
-		
 		System.out.println("press 1 manage customers, press 2 to manage catalog, press 3 to sales from last month, press 0 to go back");
         String str = br.readLine();
         if(str.equals("1")){

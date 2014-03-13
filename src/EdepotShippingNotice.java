@@ -7,6 +7,7 @@ public class EdepotShippingNotice {
 	static String create_table_sql = "CREATE TABLE EdepotShippingNotice " +
             "(shippingNoticeID CHAR(20) not NULL, " +
             " companyName CHAR(20), " +
+            " stockno CHAR(20), "+
             " manufacturer CHAR(20), " +
             " modelno CHAR(20), " +
             " quantity INTEGER, " +
@@ -14,10 +15,11 @@ public class EdepotShippingNotice {
             " PRIMARY KEY ( shippingNoticeID ))";
 	
 	//Insert new item into table
-		public static void insertEdepotItem(String shippingNoticeID, String companyName, String manufacturer, 
+		public static void insertEdepotShippingNotice(String shippingNoticeID,String stockno, String companyName, String manufacturer, 
 											String modelno, int quantity, Statement stmt){
 			String sql = "INSERT INTO EdepotShippingNotice ("+
 										   "shippingNoticeID,"+
+										   "stockno"+
 										   "companyName,"+
 										   "manufacturer,"+
 										   "modelno,"+
@@ -25,7 +27,8 @@ public class EdepotShippingNotice {
 										   "shipmentReceived"+
 												") "+
 											"Values (" + "'" + shippingNoticeID + "',"
-											   + "'" + companyName + "'," 
+											 + "'" + stockno + "'," 
+											+ "'" + companyName + "'," 
 											   + "'" + manufacturer + "',"
 											   + "'" + modelno + "',"
 											   + "'" + quantity + "',"
@@ -40,10 +43,20 @@ public class EdepotShippingNotice {
 		   }
 		}
 	
+		public static String getStockNo(String shippingno,Statement stmt)throws SQLException{
+			ResultSet rs1;
+			String sql = "Select stockno FROM EdepotShippingNotice WHERE shippingNoticeID='"+shippingno +"'";
+			rs1 = stmt.executeQuery(sql);
+			rs1.next();
+			String stockno = rs1.getString("stockno");
+			return stockno;
+		}
+		
 	public static void printall( Statement stmt) throws SQLException{
 		ResultSet rs = stmt.executeQuery ("select * from EdepotShippingNotice");
 		System.out.println("contents of EdepotShippingNotice:");
 		System.out.println("shippingNoticeID,"+
+					"stockno, "+
 				   "companyName,"+
 				   "manufacturer,"+
 				   "modelno,"+
@@ -54,6 +67,7 @@ public class EdepotShippingNotice {
 		// Iterate through the result and print the data
 		while(rs.next()){
 			System.out.println(	   rs.getString("shippingNoticeID").replaceAll("\\s+","")+",    "+
+									rs.getString("stockno").replaceAll("\\s+","     ")+
 								   rs.getString("companyName").replaceAll("\\s+","")+",         "+
 								   rs.getString("manufacturer").replaceAll("\\s+","     ")+
 								   rs.getString("modelno").replaceAll("\\s+","")+","+

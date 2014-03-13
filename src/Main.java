@@ -5,8 +5,8 @@ import java.sql.*;
 public class Main {
 	static Connection conn;
 	static String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
-	static String strUsername = "ramonrovirosa";
-	static String strPassword = "4935854";
+	static String strUsername = "alexander_simes";
+	static String strPassword = "4998837";
 	public static void main(String[] args) throws SQLException, IOException {
 		// 1. Load the Oracle JDBC driver for this program
 		try {
@@ -34,7 +34,7 @@ public class Main {
 //		ConsoleUI.initialPrompt(stmt);
 		
 //		EdepotItems.dropEdepotItem(stmt);
-//		createTable(EdepotItems.create_table_sql,stmt);
+	//	createTable(EdepotItems.create_table_sql,stmt);
 //		EdepotItems.insertEdepotItem("101", "HP",       "6111", 1,2,10,"A9",  0,stmt);
 //		EdepotItems.insertEdepotItem("201", "Dell",     "420", 	2,3,15,"A7",  0,stmt);
 //		EdepotItems.insertEdepotItem("202", "Emachine", "3958",	2,4,8, "B52", 0,stmt);
@@ -57,15 +57,16 @@ public class Main {
 //		EdepotItems.receiveShipment("101", 2, stmt);
 //		EdepotItems.receiveShippingNotice("102", "ramon movers", "101", "HP", "6111", 1, 2, 10, "A9", stmt);
 //		EdepotItems.receiveShipment("101", "101", stmt);
-		EdepotItems.printall(stmt);
+//		EdepotItems.printall(stmt);
 //		EdepotItems.checkIfNeedToSendReplenishmentOrder("201", stmt);
-		
-//		createTable(EdepotShippingNotice.create_table_sql,stmt);
+		//EdepotShippingNotice.dropEdepotshippingNoticeItem(stmt);
+		//createTable(EdepotShippingNotice.create_table_sql,stmt);
 //		EdepotShippingNotice.insertEdepotItem("101", "ramon shipping", "HP", "6111", 5, stmt);
 //		EdepotShippingNotice.updateShipmentReceivedToTrue("101", stmt);
 //		System.out.println(EdepotShippingNotice.shippingNoticeWasReceived("101", stmt));
 //		EdepotShippingNotice.printall(stmt);
-
+		
+		ConsoleUI.initialPrompt(stmt);
 		conn.close();
 	}
 	
