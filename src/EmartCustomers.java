@@ -12,12 +12,12 @@ public class EmartCustomers {
             " address CHAR(50), " +
             " isManager INTEGER, " +
             " status CHAR(20), "+
-            " Order1 INTEGER, " +
-            " Order2 INTEGER, " +
-            " Order3 INTEGER, " +
+            " Order1 numeric(10,2), " +
+            " Order2 numeric(10,2), " +
+            " Order3 numeric(10,2), " +
             " PRIMARY KEY ( customerID ))";
           	
-	public static void insertEmartCustomer(String customerID, String name, String password, String email, String address,int isManager, Statement stmt){
+	public static void insertEmartCustomer(String customerID, String name, String password, String email, String address,int isManager, String status, Statement stmt){
 		String sql = "INSERT INTO EmartCustomers ("+
 												   "customerID,"+
 												   "name,"+
@@ -36,7 +36,7 @@ public class EmartCustomers {
 											   + "'" + email + "'," 
 											   + "'" + address + "'," 
 											   + "'" + isManager + "'," 
-											   + "'" + "New" + "',"
+											   + "'" + status + "',"
 											   + "'" + "0" + "',"
 											   + "'" + "0" + "',"
 											   + "'" + "0" + "')";	
@@ -51,14 +51,14 @@ public class EmartCustomers {
 	   }
 	}
 	
-	public static void updateEmartCustomerOrderAndStatus(String customerID, int totalCost, Statement stmt){
+	public static void updateEmartCustomerOrderAndStatus(String customerID, double totalCost, Statement stmt){
 		ResultSet rs1;
 		String order1="SELECT * From  EmartCustomers C WHERE C.customerID ='" + customerID+"'"; 
 		try{
 			//get previous orders 1 & 2 for customers
 			rs1 = stmt.executeQuery(order1);
 			rs1.next();
-			int orders[] = {totalCost, rs1.getInt("Order1"), rs1.getInt("Order2")};
+			double orders[] = {totalCost, rs1.getDouble("Order1"), rs1.getDouble("Order2")};
 			String newStatus = getStatusAndUpdate(orders); 
 			System.out.println("Your status is now: "+newStatus);
 			//Update Emart Customer Orders && Status
@@ -112,7 +112,7 @@ public class EmartCustomers {
 		//System.out.println("contents of EmartCustomers:");
 		while(rs.next()){
 			// Get the value from column "columnName" with integer type
-			System.out.println("Customer ID: "+rs.getInt("customerID")+
+			System.out.println("Customer ID: "+rs.getString("customerID")+
 								", Name: "+  rs.getString("name").trim()+
 								", Status: "+rs.getString("status")
 							);
@@ -128,7 +128,7 @@ public class EmartCustomers {
 		//System.out.println("contents of EmartCustomers:");
 		while(rs.next()){
 			// Get the value from column "columnName" with integer type
-			System.out.println("Customer ID: "+rs.getInt("customerID")+
+			System.out.println("Customer ID: "+rs.getString("customerID").trim()+
 								", Name: "+  rs.getString("name").trim()+
 								", Status: "+rs.getString("status").trim()+
 								", Email: "+rs.getString("email").trim()+
@@ -188,8 +188,8 @@ public class EmartCustomers {
 		}
 	}
 	
-	private static String getStatusAndUpdate(int orders[]){
-		int orderTotals = orders[0]+orders[1]+orders[2];
+	private static String getStatusAndUpdate(double orders[]){
+		double orderTotals = orders[0]+orders[1]+orders[2];
 		if(orderTotals > 500)
 			return "Gold";
 		else if(orderTotals >100 && orderTotals <=500)
@@ -200,7 +200,7 @@ public class EmartCustomers {
 			return "New";
 	}
 
-	private static String orderStatusString(String customerID, int orders[], String newStatus){
+	private static String orderStatusString(String customerID, double orders[], String newStatus){
 		String sql = "Update EmartCustomers "+
 				 "SET status='" + newStatus + "', " +
 				 "order1='" + orders[0] + "', " +
@@ -230,7 +230,7 @@ public class EmartCustomers {
 	public static String getCustomerName(String customerID, Statement stmt){
 		ResultSet rs1;
 		String name="";
-		String order1="SELECT C.name From  EmartCustomers C WHERE C.customerID =" + customerID; 
+		String order1="SELECT C.name From  EmartCustomers C WHERE C.customerID ='" + customerID+"'"; 
 		try{
 			rs1 = stmt.executeQuery(order1);
 			rs1.next();
@@ -246,7 +246,7 @@ public class EmartCustomers {
 	public static boolean isManager(String customerID, Statement stmt){
 		ResultSet rs1;
 		String isManagerString="";
-		String order1="SELECT C.isManager From  EmartCustomers C WHERE C.customerID =" + customerID; 
+		String order1="SELECT C.isManager From  EmartCustomers C WHERE C.customerID ='" + customerID+"'"; 
 		try{
 			rs1 = stmt.executeQuery(order1);
 			rs1.next();

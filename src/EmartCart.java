@@ -157,19 +157,19 @@ public class EmartCart {
 	//gold customer 10% off order
 	//silver 5% off order
 	//10% shipping & handling fee if total less than or equal $100
-	public static int cartTotalWithoutTaxOrShipping(String customerID, Statement stmt){
+	public static double cartTotalWithoutTaxOrShipping(String customerID, Statement stmt){
 		ResultSet rs1;
 		String query = "SELECT C.quantity, A.price "+
 					   " FROM EmartCart C, EmartItems A "+
 					   " WHERE C.itemID=A.stockno"+
 					   " AND C.customerID='"+customerID+"'";
-		int total=0;
+		double total=0;
 //		System.out.println(query);
 		try{
 			//get previous orders 1 & 2 for customers
 			rs1 = stmt.executeQuery(query);
 			while(rs1.next()){
-				total+=rs1.getInt("quantity")*rs1.getInt("price");
+				total+=rs1.getInt("quantity")*rs1.getDouble("price");
 			}
 			//System.out.println("Cart total: $"+total);
 		}catch(SQLException se){
@@ -246,7 +246,7 @@ public class EmartCart {
 		return percent;
 	}
 	//CalculateGrandTotal
-	public static int calculateGrantCartTotal(int preTotal, int discount, int shipping ){
+	public static double calculateGrantCartTotal(double preTotal, int discount, int shipping ){
 		if(preTotal > 100) 
 			shipping = 0;
 		Double disc = preTotal*discount*.01;
@@ -254,7 +254,7 @@ public class EmartCart {
 	}
 
 	public static void checkoutCart(String customerID, Statement stmt) throws SQLException{
-		int total = calculateGrantCartTotal(cartTotalWithoutTaxOrShipping(customerID,stmt), getStatusDiscount(customerID, stmt), getShippingPcnt(stmt));
+		double total = calculateGrantCartTotal(cartTotalWithoutTaxOrShipping(customerID,stmt), getStatusDiscount(customerID, stmt), getShippingPcnt(stmt));
 		System.out.println("The grand checkout total is: $"+total);
 		EmartCustomers.updateEmartCustomerOrderAndStatus(customerID, total, stmt);
 		int orderno = EmartPreviousOrders.getNewOrderNo(stmt);

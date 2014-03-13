@@ -12,7 +12,7 @@ public class EmartItems {
 						             " modelno CHAR(20), " +
 						             " description CHAR(500), " +
 						             " warranty INTEGER, " +
-						             " price INTEGER, " +
+						             " price numeric(10,2), " +
 						             " quantity INTEGER, " +
 						             " PRIMARY KEY ( stockno ))";
 							
@@ -35,12 +35,11 @@ public class EmartItems {
 			System.out.println(	   rs.getString("stockno").replaceAll("\\s+","")+","+
 								   rs.getString("category").replaceAll("\\s+","")+","+
 								   rs.getString("manufacturer").replaceAll("\\s+","")+","+
-								   rs.getString("modelno").replaceAll("\\s+","")+","+
-								   rs.getString("description").replaceAll("\\s+","")+",  "+
+								   rs.getString("modelno").replaceAll("\\s+","")+", ["+
+								   rs.getString("description").replaceAll("\\s+","")+"],  "+
 								   rs.getInt("warranty")+","+
-								   rs.getInt("price")+","+
-								   rs.getInt("quantity")+","+
-								   rs.getInt("price")
+								   rs.getFloat("price")+","+
+								   rs.getInt("quantity")
 							);
 		}
 		rs.close();
@@ -49,7 +48,7 @@ public class EmartItems {
 	//insertEmartItem
 	public static void insertEmartItem(String stockno, String category,String manufacturer,
 									   String modelno, String description,
-									   int warranty,int price, int quantity, 
+									   int warranty,double price, int quantity, 
 									   Statement stmt){
 		String sql = "INSERT INTO EmartItems ("+
 												   "stockno,"+
@@ -88,10 +87,10 @@ public class EmartItems {
 		return name;		
 	}
 	
-	public static int getItemPrice( Statement stmt, String stockno ) throws SQLException{
+	public static double getItemPrice( Statement stmt, String stockno ) throws SQLException{
 		ResultSet rs3 = stmt.executeQuery("SELECT price from EmartItems where stockno ='"+stockno+"'");
 		rs3.next();
-		int price = rs3.getInt("price");
+		double price = rs3.getDouble("price");
 		rs3.close();
 		return price;		
 	}
@@ -119,9 +118,8 @@ public class EmartItems {
 								   rs.getString("modelno").replaceAll("\\s+","")+","+
 								   rs.getString("description").replaceAll("\\s+","")+",  "+
 								   rs.getInt("warranty")+","+
-								   rs.getInt("price")+","+
-								   rs.getInt("quantity")+","+
-								   rs.getInt("price")
+								   rs.getDouble("price")+","+
+								   rs.getInt("quantity")
 							);
 		}
 		rs.close();
@@ -135,7 +133,7 @@ public class EmartItems {
 		ArrayList<itemVar> rs1 = new ArrayList<itemVar>();
 
 		while(rs.next()){
-			itemVar item = new itemVar(rs.getInt("quantity"),rs.getString("stockno"),rs.getString("category"),rs.getInt("price"),rs.getString("manufacturer"),rs.getString("modelno"),rs.getString("description"),rs.getInt("warranty"));
+			itemVar item = new itemVar(rs.getInt("quantity"),rs.getString("stockno"),rs.getString("category"),rs.getDouble("price"),rs.getString("manufacturer"),rs.getString("modelno"),rs.getString("description"),rs.getInt("warranty"));
 			rs1.add(item);
 		}
 		rs.close();
@@ -207,7 +205,7 @@ public class EmartItems {
 				
 	}
 	//update emart items Price...
-	public static void updatePrice(String stockno, int price, Statement stmt){
+	public static void updatePrice(String stockno, double price, Statement stmt){
 		String sql = "Update EmartItems "+
 				 "SET price='" + price + "' " +
 				 "Where "+ " stockno='"+stockno +"'";
@@ -305,12 +303,12 @@ class itemVar{
 	int quantity;
 	String itemID;
 	String category;
-	int price;
+	double price;
 	String manu;
 	String modelno;
 	String desc;
 	int warrenty;
-	public itemVar(int q, String i, String c, int p, String man, String md, String d, int w){
+	public itemVar(int q, String i, String c, double p, String man, String md, String d, int w){
 		quantity=q;
 		itemID=i;
 		category=c;
@@ -341,7 +339,7 @@ class itemVar{
 	public String getCategory(){
 		return category;
 	}
-	public int getPrice(){
+	public double getPrice(){
 		return price;
 	}
 }

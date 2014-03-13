@@ -423,7 +423,7 @@ public class ConsoleUI {
        	String address = br.readLine();
        	System.out.println("is this a manager account? (1 or 0):");
        	String manager = br.readLine();
-       	EmartCustomers.insertEmartCustomer(customerID, new_name, password,email, address, Integer.parseInt(manager),stmt);
+       	EmartCustomers.insertEmartCustomer(customerID, new_name, password,email, address, Integer.parseInt(manager), "New",stmt);
        	LoggedInCustomerHandler(stmt, customerID);
        	return;	    
 	}

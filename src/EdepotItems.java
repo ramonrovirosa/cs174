@@ -80,8 +80,7 @@ public class EdepotItems {
 				   "quantity,"+
 				   "max,"+
 				   "location,"+
-				   "replenishment"+
-				   ") ");
+				   "replenishment");
 
 		// Iterate through the result and print the data
 		while(rs.next()){
