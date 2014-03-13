@@ -1,6 +1,8 @@
 import java.io.*;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
 
 public class ConsoleUI {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -279,7 +281,7 @@ public class ConsoleUI {
 	}
 	
 	static void LoggedInCustomerHandler( Statement stmt, String id ) throws IOException, SQLException{
-		System.out.println("press 1 to view cart, press 2 to edit cart contents, press 3 to view/rerun previous orders, "
+		System.out.println("press 1 to view cart, press 2 to edit cart contents, press 3 to view/search/rerun previous orders, "
 				+ "\npress 4 to view your status, press 5 to checkout, press 0 to logout");
         String str = br.readLine();
         if(str.equals("1")){
@@ -287,15 +289,7 @@ public class ConsoleUI {
         }else if(str.equals("2")){
         	CustomerEditCart(stmt, id);
         }else if(str.equals("3")){
-        	EmartPreviousOrders.printallcustomer(id,stmt);
-        	System.out.println("To rerun a previous order, enter the order no. Enter 0 to go back.");
-            String str1 = br.readLine();
-            if( str1.equals("0")){
-        		LoggedInCustomerHandler(stmt,id);
-            }else{
-            	EmartPreviousOrders.rerunPreviousOrder(Integer.parseInt(str1),stmt);
-            	LoggedInCustomerHandler(stmt,id);
-            }
+        	CustomerPreviousOrders(stmt,id);
         }else if(str.equals("4")){
         	System.out.println("Your current customer status is: "+EmartCustomers.getCustomerStatus(id, stmt).trim());
         	LoggedInCustomerHandler(stmt,id);
@@ -307,6 +301,35 @@ public class ConsoleUI {
         }else{
         	System.out.println("Could not read input...");
         	LoggedInCustomerHandler(stmt, id);
+        }	
+	}
+	
+	static void CustomerPreviousOrders( Statement stmt, String id ) throws IOException, SQLException{
+		System.out.println("press 1 view previous orders, press 2 search by order no, press 3 to rerun a previous order, press 0 to go back");
+        String str = br.readLine();
+        if(str.equals("1")){
+        	EmartPreviousOrders.printallcustomer(id,stmt);
+        	CustomerPreviousOrders(stmt,id);
+        }else if(str.equals("2")){
+        	System.out.println("Enter orderno to search for ");
+        	int orderno = Integer.parseInt(br.readLine());
+        	EmartPreviousOrders.printallorder(orderno,stmt);
+        	CustomerPreviousOrders(stmt,id);
+        }else if(str.equals("3")){
+        	CustomerPreviousOrders(stmt,id);
+        	System.out.println("Enter orderno to reurn. Enter 0 to cancel.");
+            String str1 = br.readLine();
+            if( str1.equals("0")){
+        		LoggedInCustomerHandler(stmt,id);
+            }else{
+            	EmartPreviousOrders.rerunPreviousOrder(Integer.parseInt(str1),stmt);
+            	LoggedInCustomerHandler(stmt,id);
+            }
+        }else if(str.equals("0")){
+        	LoggedInCustomerHandler(stmt,id);
+        }else{
+        	System.out.println("Could not read input...");
+        	CustomerPreviousOrders(stmt,id);
         }	
 	}
 	
@@ -336,8 +359,10 @@ public class ConsoleUI {
 		System.out.println("Enter modelno:"); String modelno = br.readLine();
 		System.out.println("Enter category:"); String category = br.readLine();
 		System.out.println("Enter description:"); String desc = br.readLine();
-		EmartItems.searchEmartItems(stockno, category, manu, modelno, desc, stmt);
-		LoggedInCustomerHandler(stmt, id);
+		System.out.println("Enter stockno of item that has this item as an accessory:"); String parentno = br.readLine();
+		ArrayList<String> accessories = EmartAccessories.getAccessories(parentno, stmt);
+		EmartItems.searchEmartItems(stockno, category, manu, modelno, desc, accessories, stmt);
+		CustomerEditCart(stmt, id);
 	}
 	
 	static void CustomerRemoveItemsCart( Statement stmt, String id) throws NumberFormatException, IOException, SQLException{
@@ -404,7 +429,8 @@ public class ConsoleUI {
 	}
 	
 	static void ManagerHandler(Statement stmt) throws IOException, SQLException{
-		System.out.println("press 1 manage customers, press 2 to manage catalog, press 3 to sales from last month, press 0 to go back");
+		System.out.println("press 1 manage customers, press 2 to manage catalog, press 3 to sales from last month,"
+				+ "press 4 to manage previous orders, press 0 to go back");
         String str = br.readLine();
         if(str.equals("1")){
         	ManagerEditCustomersHandler(stmt);
@@ -413,12 +439,36 @@ public class ConsoleUI {
         }else if(str.equals("3")){
         	EmartPreviousOrders.findPreviousOrdersByDate(EmartCart.now(), EmartCart.monthAgo(), stmt );
         	ManagerHandler(stmt);
+        }else if(str.equals("4")){
+        	ManagerPrevOrder(stmt);
+        	ManagerHandler(stmt);
         }else if(str.equals("0")){
         	initialPrompt(stmt);
         }else{
         	System.out.println("Could not read input...");
         	ManagerHandler(stmt);
         }
+	}
+	
+	static void ManagerPrevOrder(Statement stmt) throws SQLException, NumberFormatException, IOException{
+		System.out.println("press 1 to view all previous orders, press 2 to remove a previous order, press 0 to go back");
+        String str = br.readLine();
+        if(str.equals("1")){
+    		EmartPreviousOrders.printall(stmt);
+    		ManagerPrevOrder(stmt);
+        }else if(str.equals("2")){
+        	System.out.println("Enter orderid of previous order to remove:");
+			String orderid = br.readLine();
+        	System.out.println("Enter stockno of previous order to remove:");
+			String stockno = br.readLine();
+			EmartPreviousOrders.deletePreviousOrders(orderid, stockno, stmt);
+			ManagerPrevOrder(stmt);
+	     }else if(str.equals("0")){
+	        	ManagerHandler(stmt);
+	     }else{
+	        	System.out.println("Could not read input...");
+	        	ManagerPrevOrder(stmt);
+	        }
 	}
 	
 	static void ManagerEditCustomersHandler(Statement stmt) throws SQLException, IOException{
@@ -508,7 +558,6 @@ public class ConsoleUI {
 		}
 		ManagerEditCatalogHandler(stmt);
 	}
-	
 	
 	static void ManagerAddItemHandler(Statement stmt) throws NumberFormatException, IOException, SQLException{
 		while(true){

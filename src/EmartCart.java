@@ -256,6 +256,7 @@ public class EmartCart {
 	public static void checkoutCart(String customerID, Statement stmt) throws SQLException{
 		int total = calculateGrantCartTotal(cartTotalWithoutTaxOrShipping(customerID,stmt), getStatusDiscount(customerID, stmt), getShippingPcnt(stmt));
 		System.out.println("The grand checkout total is: $"+total);
+		EmartCustomers.updateEmartCustomerOrderAndStatus(customerID, total, stmt);
 		int orderno = EmartPreviousOrders.getNewOrderNo(stmt);
 		ArrayList<cartItemInfo> cartItems = new ArrayList<cartItemInfo>();
 		ResultSet rs1 = stmt.executeQuery("Select itemID, quantity from EmartCart where customerID = '"+customerID+"'");

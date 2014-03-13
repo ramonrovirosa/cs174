@@ -1,6 +1,7 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
 public class EmartAccessories {
@@ -26,6 +27,16 @@ public class EmartAccessories {
 			  System.out.println(se);
 		      se.printStackTrace();
 	   }	
+	}
+	
+	public static ArrayList<String> getAccessories(String stockno, Statement stmt) throws SQLException{
+		ArrayList<String> accessories = new ArrayList<String>();
+		ResultSet rs = stmt.executeQuery ("select accesoryno from EmartAccessories where stockno ='"+stockno+"'");
+		while(rs.next()){
+			accessories.add(rs.getString("accesoryno"));
+		}
+		rs.close();
+		return accessories;
 	}
 	
 	//print

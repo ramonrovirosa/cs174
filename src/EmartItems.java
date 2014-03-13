@@ -17,8 +17,9 @@ public class EmartItems {
 						             " PRIMARY KEY ( stockno ))";
 							
 	
-	public static void searchEmartItems(String stockno, String category, String manu, String modelno, String desc, Statement stmt) throws SQLException{
-		String sql = constructSearchQuery(stockno, category, manu, modelno, desc);
+	public static void searchEmartItems(String stockno, String category, String manu, 
+			String modelno, String desc, ArrayList<String> accessories, Statement stmt) throws SQLException{
+		String sql = constructSearchQuery(stockno, category, manu, modelno, accessories, desc);
 		ResultSet rs = stmt.executeQuery (sql);
 		System.out.println("Your search returned:");
 		System.out.println("stockno,"+
@@ -244,15 +245,29 @@ public class EmartItems {
 		}
 	}
 	
-	public static String constructSearchQuery(String stockno, String category, String manu, String modelno, String desc){
+	public static String constructSearchQuery(String stockno, String category, String manu, 
+			String modelno, ArrayList<String> accessories, String desc){
 		int whereflag=0;
+		String accessory_query = "";
+		for(int i=0;i<accessories.size();i++){
+			accessory_query+="OR stockno LIKE '%"+accessories.get(i).trim()+"%' ";
+		}			
 		String sql = "select * from EmartItems ";
 		if(!stockno.equals("")){
 			if (whereflag==0){
-				sql+="WHERE stockno LIKE '%"+stockno+"%'";
+				sql+="WHERE ( stockno LIKE '%"+stockno+"%'"+accessory_query+")";
+				
 				whereflag=1;
 			}else
-				sql+=" AND stockno LIKE '%"+stockno+"%'";
+				sql+=" AND ( stockno LIKE '%"+stockno+"%'"+accessory_query+")";
+		}else{
+				if (whereflag==0 && accessories.size()!=0){
+					sql+="WHERE ("+accessory_query.substring(2)+")";
+					
+					whereflag=1;
+				}else if (whereflag!=0 && accessories.size()!=0){
+					sql+=" AND ("+accessory_query.substring(2)+")";
+				}
 		}
 		if(!category.equals("")){
 			if (whereflag==0){

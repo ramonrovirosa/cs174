@@ -92,6 +92,23 @@ public class EmartPreviousOrders {
 		}
 		rs.close();
 	}
+	
+	public static void printallorder( int orderid, Statement stmt) throws SQLException{
+		ResultSet rs = stmt.executeQuery ("select * from EmartPreviousOrders where orderno="+orderid);
+
+		// Iterate through the result and print the data
+		System.out.println("Previous order no."+orderid+":");
+		while(rs.next()){
+			// Get the value from column "columnName" with integer type
+			System.out.println("Stock Number: "+rs.getString("itemID").trim()+
+						", Customer ID: "+rs.getString("customerID").trim()+
+						", Quantity: "+rs.getInt("quantity")+
+						", Price: $"+rs.getInt("price")+
+						", Order Date: "+rs.getDate("orderDate")
+				);
+		}
+		rs.close();
+	}
 	//find previous orders by date
 	//Date format yyyy-mm-dd
 	public static void findPreviousOrdersByDate(String ordersBeforeDate, String ordersAfterDate,  Statement stmt)throws SQLException{
@@ -129,12 +146,12 @@ public class EmartPreviousOrders {
 	}
 	
 	//delete item from previous orders
-	public static void deletePreviousOrders(int orderno, int itemID, Statement stmt){
+	public static void deletePreviousOrders(String orderno, String itemID, Statement stmt){
 		String sql = "DELETE FROM EmartPreviousOrders WHERE itemID = '"+itemID+
 				 "' AND orderno='"+orderno+"'";
 		try{
 			stmt.executeUpdate(sql);
-			System.out.println("removed EmartPreviousOrders from the database");
+			System.out.println("removed order for item no."+itemID+" in order "+orderno+" from the database");
 		}catch(SQLException se){
 		 //Handle errors for JDBC
 			 System.out.println(se);

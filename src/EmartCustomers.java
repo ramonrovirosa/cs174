@@ -53,18 +53,18 @@ public class EmartCustomers {
 	
 	public static void updateEmartCustomerOrderAndStatus(String customerID, int totalCost, Statement stmt){
 		ResultSet rs1;
-		String order1="SELECT * From  EmartCustomers C WHERE C.customerID =" + customerID; 
+		String order1="SELECT * From  EmartCustomers C WHERE C.customerID ='" + customerID+"'"; 
 		try{
 			//get previous orders 1 & 2 for customers
 			rs1 = stmt.executeQuery(order1);
 			rs1.next();
-			int orders[] = {totalCost, rs1.getInt(4), rs1.getInt(5)};
+			int orders[] = {totalCost, rs1.getInt("Order1"), rs1.getInt("Order2")};
 			String newStatus = getStatusAndUpdate(orders); 
-			System.out.println(newStatus);
+			System.out.println("Your status is now: "+newStatus);
 			//Update Emart Customer Orders && Status
 			String sql = orderStatusString(customerID, orders,newStatus);
 			updateOrderStatus(sql, stmt);
-			System.out.println("Updated customer: " + sql);
+			//System.out.println("Updated customer: " + sql);
 		}catch(SQLException se){
 	      //Handle errors for JDBC
 		  System.out.println(se);
