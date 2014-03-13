@@ -5,8 +5,8 @@ import java.sql.*;
 public class Main {
 	static Connection conn;
 	static String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
-	static String strUsername = "alexander_simes";
-	static String strPassword = "4998837";
+	static String strUsername = "ramonrovirosa";
+	static String strPassword = "4935854";
 	public static void main(String[] args) throws SQLException, IOException {
 		// 1. Load the Oracle JDBC driver for this program
 		try {
@@ -26,7 +26,7 @@ public class Main {
 		// Create a Statement
 		Statement stmt = conn.createStatement();
 		
-		//resetDB(stmt);
+		resetDB(stmt);
 		
 		ConsoleUI.initialPrompt(stmt);
 		conn.close();
@@ -59,14 +59,14 @@ public class Main {
 		
 		DiscAndShipPrcnt.insertDefaults(stmt);
 		
-		EmartCustomers.insertEmartCustomer("Rhagrid", "Rubeus Hagrid", "Rhagrid", "rhagrid@cs","123 MyStreet, Goleta apt A, Ca", 0, "Gold", stmt);
-		EmartCustomers.insertEmartCustomer("Mhooch", "Madam Hooch", "Mhooch", "mhooch@cs","123 MyStreet, Goleta apt B, Ca", 0, "Silver",stmt);
-		EmartCustomers.insertEmartCustomer("Amoody", "Alastor Moody", "Amoody", "amoody@cs","123 MyStreet, Goleta apt C, Ca", 0, "New",stmt);
-		EmartCustomers.insertEmartCustomer("Pquirrell", "Professor Quirrell", "Pquirrell", "pquirrell@cs","123 MyStreet, Goleta apt D, Ca", 0,"New", stmt);
-		EmartCustomers.insertEmartCustomer("Sblack", "Sirius Black", "Sblack", "sblack@cs","123 MyStreet, Goleta apt E, Ca", 1, "Green",stmt);
-		EmartCustomers.insertEmartCustomer("Ddiggle", "Dedalus Diggle", "Ddiggle", "ddiggle@cs","123 MyStreet, Goleta apt F, Ca", 0, "Green", stmt);
+		EmartCustomers.insertEmartCustomer("Rhagrid", 	"Rubeus Hagrid", 		"Rhagrid", 	"rhagrid@cs", 	"123 MyStreet, Goleta apt A, Ca", 0, "Gold", stmt);
+		EmartCustomers.insertEmartCustomer("Mhooch",  	"Madam Hooch", 			"Mhooch", 	"mhooch@cs", 	"123 MyStreet, Goleta apt B, Ca", 0, "Silver",stmt);
+		EmartCustomers.insertEmartCustomer("Amoody",  	"Alastor Moody", 		"Amoody", 	"amoody@cs", 	"123 MyStreet, Goleta apt C, Ca", 0, "New",stmt);
+		EmartCustomers.insertEmartCustomer("Pquirrell", "Professor Quirrell", 	"Pquirrell","pquirrell@cs",	"123 MyStreet, Goleta apt D, Ca", 0, "New", stmt);
+		EmartCustomers.insertEmartCustomer("Sblack", 	"Sirius Black", 		"Sblack", 	"sblack@cs",	"123 MyStreet, Goleta apt E, Ca", 1, "Green",stmt);
+		EmartCustomers.insertEmartCustomer("Ddiggle", 	"Dedalus Diggle", 		"Ddiggle", 	"ddiggle@cs",	"123 MyStreet, Goleta apt F, Ca", 0, "Green", stmt);
 
-		EdepotItems.insertEdepotItem("AA00101", "HP", "6111", 1,2,10,"A9", stmt);
+		EdepotItems.insertEdepotItem("AA00101", "HP", 		"6111", 1,2,10,"A9", stmt);
 		EdepotItems.insertEdepotItem("AA00201", "Dell",     "420", 	2,3,15,"A7", stmt);
 		EdepotItems.insertEdepotItem("AA00202", "Emachine", "3958",	2,4,8, "B52",stmt);
 		EdepotItems.insertEdepotItem("AA00301", "Envision", "720", 	3,4,6, "C27",stmt);
@@ -87,10 +87,10 @@ public class Main {
 				"Processer speed: 2.9Ghz, Ram size: 512 Mb, Hard disk size: 80Gb",
 				12,369.99,4, stmt);
 		EmartItems.insertEmartItem("AA00301", "Monitor", "Envision", "720",
-				"Size: 17, Weight: 25 lb.",
+				"Size: 17\", Weight: 25 lb.",
 				36,69.99,4, stmt);
 		EmartItems.insertEmartItem("AA00302", "Monitor", "Samsung",  "712", 
-				"Size: 17, Weight: 9.6 lb.",
+				"Size: 17\", Weight: 9.6 lb.",
 				36,279.99,4, stmt);
 		EmartItems.insertEmartItem("AA00401", "Software", "Symantec", "2005", 
 				"Required disk size: 128 MB, Required RAM size: 64 MB",
