@@ -19,7 +19,7 @@ public class EdepotShippingNotice {
 											String modelno, int quantity, Statement stmt){
 			String sql = "INSERT INTO EdepotShippingNotice ("+
 										   "shippingNoticeID,"+
-										   "stockno"+
+										   "stockno,"+
 										   "companyName,"+
 										   "manufacturer,"+
 										   "modelno,"+
@@ -35,7 +35,8 @@ public class EdepotShippingNotice {
 											   + "'" + 0 + "')";	
 			try{
 				stmt.executeUpdate(sql);
-				System.out.println(sql);
+				//System.out.println(sql);
+				System.out.println("Added shipping notice for "+quantity+" of item no. "+stockno);
 			}catch(SQLException se){
 		      //Handle errors for JDBC
 			  System.out.println(se);

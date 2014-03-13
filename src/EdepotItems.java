@@ -112,7 +112,7 @@ public class EdepotItems {
 	//Insert new item into table
 	public static void insertEdepotItem(String stockno, String manufacturer, String modelno, 
 										int min, int quantity, int max,
-										String location, int replenishment, Statement stmt){
+										String location, Statement stmt){
 		String sql = "INSERT INTO EdepotItems ("+
 												   "stockno,"+
 												   "manufacturer,"+
@@ -129,8 +129,7 @@ public class EdepotItems {
 										   + "'" + min + "',"
 										   + "'" + quantity + "',"
 										   + "'" + max + "',"
-										   + "'" + location + "',"
-										   + "'" + replenishment + "')";	
+										   + "'" + location + "', 0 )";
 		try{
 			stmt.executeUpdate(sql);
 			//System.out.println(sql);
@@ -141,7 +140,7 @@ public class EdepotItems {
 	      se.printStackTrace();
 	   }
 	}
-	public static void updateEdepotQuantity(String stockno, int quantity, Statement stmt){
+	public static void updateEdepotQuantity(String stockno, int quantity, Statement stmt) throws SQLException{
 		String sql = "Update EdepotItems "+
 					 "SET quantity='" + quantity + "' " +
 					 "Where "+ " stockno='"+stockno +"'";
@@ -153,6 +152,8 @@ public class EdepotItems {
 		  System.out.println(se);
 	      se.printStackTrace();
 	   }
+		checkIfNeedToSendReplenishmentOrder(stockno,stmt);
+
 	}
 	public static void subtractQuantityForItemsSold(String stockno, int quantitySold, Statement stmt)throws SQLException{
 		int quantity = getQuantityForItem(stockno, stmt);
@@ -225,9 +226,10 @@ public class EdepotItems {
 				updateEdepotReplenishment(stockno, quantity, stmt);
 			}else{
 				//insert item in table 
+				
 				insertEdepotItem(stockno,manufacturer, modelno, 
-						min, 0, max,
-						location, quantity,stmt);
+						min, quantity, max,
+						location, stmt);
 			}	
 		}catch(SQLException se){
 	      //Handle errors for JDBC

@@ -217,10 +217,8 @@ public class ConsoleUI {
 					System.out.println("Enter quantity of new item:");
 					int quantity = Integer.parseInt(br.readLine());
 					System.out.println("Enter location of new item:");
-					String location = br.readLine();
-					System.out.println("Enter replenishment of new item:");
-					int replenishment = Integer.parseInt(br.readLine());			
-					EdepotItems.insertEdepotItem( stockno, manufacturer, modelno, min, quantity, max, location, replenishment, stmt);
+					String location = br.readLine();			
+					EdepotItems.insertEdepotItem( stockno, manufacturer, modelno, min, quantity, max, location, stmt);
 					System.out.println("Would you like to add antoher item to Edepot? (y/n)");
 					String r = br.readLine();
 					if (r.equals("n")){
