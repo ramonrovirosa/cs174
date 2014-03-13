@@ -247,7 +247,7 @@ public class EmartCart {
 	}
 	//CalculateGrandTotal
 	public static double calculateGrantCartTotal(double preTotal, int discount, int shipping ){
-		if(preTotal > 100) 
+		if(preTotal > 100 && preTotal < 0) 
 			shipping = 0;
 		Double disc = preTotal*discount*.01;
 		return preTotal - disc.intValue() + shipping;
